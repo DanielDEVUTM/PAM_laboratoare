@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../theme/app_colors.dart';
+import 'package:fluttersdk_wind/fluttersdk_wind.dart';
 
 class ProductScreen extends StatelessWidget {
   const ProductScreen({super.key});
@@ -8,9 +7,12 @@ class ProductScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: Colors.white,
       body: SafeArea(
-        child: Center(child: Text('Product')),
+        child: WDiv(
+          className: 'flex items-center justify-center',
+          children: [WText('Product', className: 'font-mont')],
+        ),
       ),
     );
   }

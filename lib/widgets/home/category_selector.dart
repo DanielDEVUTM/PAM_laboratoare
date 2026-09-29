@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../../theme/app_colors.dart';
-import '../../theme/app_text_styles.dart';
+import 'package:fluttersdk_wind/fluttersdk_wind.dart';
 
 class CategorySelector extends StatefulWidget {
   const CategorySelector({super.key});
@@ -22,20 +20,17 @@ class _CategorySelectorState extends State<CategorySelector> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 21, right: 18),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          for (int i = 0; i < _categories.length; i++)
-            _CategoryItem(
-              label: _categories[i].$1,
-              icon: _categories[i].$2,
-              selected: i == _selected,
-              onTap: () => setState(() => _selected = i),
-            ),
-        ],
-      ),
+    return WDiv(
+      className: 'flex flex-row justify-between pl-[21px] pr-[18px]',
+      children: [
+        for (int i = 0; i < _categories.length; i++)
+          _CategoryItem(
+            label: _categories[i].$1,
+            icon: _categories[i].$2,
+            selected: i == _selected,
+            onTap: () => setState(() => _selected = i),
+          ),
+      ],
     );
   }
 }
@@ -55,52 +50,32 @@ class _CategoryItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    final ring = selected ? 'border-brown' : 'border-transparent';
+    final circle = selected ? 'bg-brown' : 'bg-mist';
+    final text = selected ? 'text-brown' : 'text-pebble';
+
+    return WAnchor(
       onTap: onTap,
-      behavior: HitTestBehavior.opaque,
-      child: SizedBox(
-        width: 70,
-        child: Column(
-          children: [
-            Container(
-              width: 42,
-              height: 42,
-              padding: const EdgeInsets.all(2),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: selected ? AppColors.brown : Colors.transparent,
-                ),
-              ),
-              child: Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: selected
-                      ? AppColors.brown
-                      : AppColors.categoryBackground,
-                ),
-                alignment: Alignment.center,
-                child: Image.asset(
+      child: WDiv(
+        className: 'flex flex-col items-center w-[70px]',
+        children: [
+          WDiv(
+            className: 'size-[42px] p-[2px] rounded-full border $ring',
+            child: WDiv(
+              className:
+                  'flex items-center justify-center size-[36px] rounded-full $circle',
+              children: [
+                Image.asset(
                   icon,
                   width: 20,
                   height: 20,
-                  color: selected
-                      ? AppColors.white
-                      : AppColors.categoryInactive,
+                  color: selected ? Colors.white : context.wColorExt('pebble'),
                 ),
-              ),
+              ],
             ),
-            const SizedBox(height: 6),
-            Text(
-              label,
-              style: HomeTextStyles.category.copyWith(
-                color: selected
-                    ? AppColors.brown
-                    : AppColors.categoryInactive,
-              ),
-            ),
-          ],
-        ),
+          ),
+          WText(label, className: 'mt-[6px] text-[9.5px] $text'),
+        ],
       ),
     );
   }

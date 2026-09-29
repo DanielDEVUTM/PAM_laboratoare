@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../../theme/app_text_styles.dart';
+import 'package:fluttersdk_wind/fluttersdk_wind.dart';
 
 class SectionHeader extends StatelessWidget {
   final String title;
@@ -10,19 +9,18 @@ class SectionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 32, right: 33),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text(title, style: HomeTextStyles.sectionTitle),
-          GestureDetector(
-            onTap: onShowAll,
-            child: const Text('Show all', style: HomeTextStyles.showAll),
-          ),
-        ],
-      ),
+    return WDiv(
+      className: 'flex flex-row items-center justify-between pl-[32px] pr-[33px]',
+      children: [
+        WDiv(
+          className: 'flex-1',
+          child: WText(title, className: 'text-[21px] font-medium text-black'),
+        ),
+        WAnchor(
+          onTap: onShowAll,
+          child: const WText('Show all', className: 'text-[14px] text-muted'),
+        ),
+      ],
     );
   }
 }

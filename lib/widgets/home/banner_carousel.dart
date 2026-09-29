@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../../theme/app_colors.dart';
-import '../../theme/app_text_styles.dart';
+import 'package:fluttersdk_wind/fluttersdk_wind.dart';
 
 class BannerCarousel extends StatefulWidget {
   const BannerCarousel({super.key});
@@ -24,29 +22,22 @@ class _BannerCarouselState extends State<BannerCarousel> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 32),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(10),
-        child: SizedBox(
-          height: 168,
-          child: Stack(
-            children: [
-              PageView.builder(
-                controller: _controller,
-                itemCount: _pages,
-                onPageChanged: (index) => setState(() => _current = index),
-                itemBuilder: (context, index) => const _BannerPage(),
-              ),
-              Positioned(
-                left: 0,
-                right: 0,
-                bottom: 9,
-                child: _PageIndicator(count: _pages, current: _current),
-              ),
-            ],
+    return WDiv(
+      className: 'px-[32px]',
+      child: WDiv(
+        className: 'relative h-[168px] rounded-xl overflow-hidden',
+        children: [
+          PageView.builder(
+            controller: _controller,
+            itemCount: _pages,
+            onPageChanged: (index) => setState(() => _current = index),
+            itemBuilder: (context, index) => const _BannerPage(),
           ),
-        ),
+          WDiv(
+            className: 'absolute bottom-[9px] left-0 right-0',
+            child: _PageIndicator(count: _pages, current: _current),
+          ),
+        ],
       ),
     );
   }
@@ -57,17 +48,17 @@ class _BannerPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      fit: StackFit.expand,
+    return const WDiv(
+      className: 'relative w-full h-[168px]',
       children: [
-        Image.asset('assets/images/banner.jpg', fit: BoxFit.cover),
-        const Positioned(
-          left: 188,
-          top: 18,
-          child: Text(
-            'Autumn\nCollection\n2021',
-            style: HomeTextStyles.bannerTitle,
-          ),
+        WImage(
+          src: 'asset://assets/images/banner.jpg',
+          className: 'w-full h-[168px] object-cover',
+        ),
+        WText(
+          'Autumn\nCollection\n2021',
+          className:
+              'absolute top-[18px] left-[188px] text-[22.5px] font-bold leading-[31px] text-white',
         ),
       ],
     );
@@ -82,13 +73,14 @@ class _PageIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+    return WDiv(
+      className: 'flex flex-row items-center justify-center',
       children: [
-        for (int i = 0; i < count; i++) ...[
-          if (i > 0) SizedBox(width: i == 1 ? 11 : 11.5),
-          i == current ? const _ActiveDot() : const _Dot(),
-        ],
+        for (int i = 0; i < count; i++)
+          WDiv(
+            className: i == 0 ? '' : (i == 1 ? 'ml-[11px]' : 'ml-[11.5px]'),
+            child: i == current ? const _ActiveDot() : const _Dot(),
+          ),
       ],
     );
   }
@@ -99,14 +91,7 @@ class _Dot extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 4,
-      height: 4,
-      decoration: const BoxDecoration(
-        color: AppColors.white,
-        shape: BoxShape.circle,
-      ),
-    );
+    return const WDiv(className: 'size-[4px] rounded-full bg-white');
   }
 }
 
@@ -115,15 +100,10 @@ class _ActiveDot extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 10.5,
-      height: 10.5,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        border: Border.all(color: AppColors.white),
-      ),
-      child: const _Dot(),
+    return const WDiv(
+      className:
+          'flex items-center justify-center size-[10.5px] rounded-full border border-white',
+      children: [_Dot()],
     );
   }
 }

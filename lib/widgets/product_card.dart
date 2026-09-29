@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttersdk_wind/fluttersdk_wind.dart';
 
 import '../models/product.dart';
 
@@ -6,47 +7,35 @@ import '../models/product.dart';
 /// Folosit in "Feature Products" (Home) si "Similar Product" (Product).
 class ProductCard extends StatelessWidget {
   final Product product;
-  final TextStyle nameStyle;
-  final TextStyle priceStyle;
+  final String nameClassName;
+  final String priceClassName;
   final VoidCallback? onTap;
 
   const ProductCard({
     super.key,
     required this.product,
-    required this.nameStyle,
-    required this.priceStyle,
+    required this.nameClassName,
+    required this.priceClassName,
     this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return WAnchor(
       onTap: onTap,
-      child: SizedBox(
-        width: 126,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: Image.asset(
-                product.image,
-                width: 126,
-                height: 172,
-                fit: BoxFit.cover,
-              ),
-            ),
-            const SizedBox(height: 14),
-            Text(
-              product.name,
-              style: nameStyle,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-            const SizedBox(height: 4.5),
-            Text(product.formattedPrice, style: priceStyle),
-          ],
-        ),
+      child: WDiv(
+        className: 'flex flex-col items-start w-[126px]',
+        children: [
+          WImage(
+            src: 'asset://${product.image}',
+            className: 'w-[126px] h-[172px] rounded-lg object-cover',
+          ),
+          WText(product.name, className: 'mt-[14px] truncate $nameClassName'),
+          WText(
+            product.formattedPrice,
+            className: 'mt-[4.5px] $priceClassName',
+          ),
+        ],
       ),
     );
   }

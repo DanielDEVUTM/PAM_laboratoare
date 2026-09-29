@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:fluttersdk_wind/fluttersdk_wind.dart';
 
 import '../../data/app_data.dart';
-import '../../theme/app_text_styles.dart';
 import '../product_card.dart';
 import 'section_header.dart';
 
@@ -10,26 +10,23 @@ class FeatureProducts extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const products = AppData.featureProducts;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+    return WDiv(
+      className: 'flex flex-col items-stretch',
       children: [
         const SectionHeader(title: 'Feature Products'),
-        const SizedBox(height: 17),
-        SizedBox(
-          height: 230,
-          child: ListView.separated(
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 35),
-            itemCount: products.length,
-            separatorBuilder: (context, index) => const SizedBox(width: 20),
-            itemBuilder: (context, index) => ProductCard(
-              product: products[index],
-              nameStyle: HomeTextStyles.productName,
-              priceStyle: HomeTextStyles.productPrice,
-              onTap: () => Navigator.pushNamed(context, '/product'),
-            ),
+        WDiv(
+          className: 'overflow-x-auto mt-[17px]',
+          child: WDiv(
+            className: 'flex flex-row items-start gap-[20px] px-[35px]',
+            children: [
+              for (final product in AppData.featureProducts)
+                ProductCard(
+                  product: product,
+                  nameClassName: 'text-[11px] font-medium text-ink',
+                  priceClassName: 'text-[15px] font-bold text-ink',
+                  onTap: () => Navigator.pushNamed(context, '/product'),
+                ),
+            ],
           ),
         ),
       ],

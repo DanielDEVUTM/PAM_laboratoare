@@ -1,29 +1,24 @@
 import 'package:flutter/material.dart';
-
-import '../../theme/app_colors.dart';
-import '../../theme/app_text_styles.dart';
+import 'package:fluttersdk_wind/fluttersdk_wind.dart';
 
 class HomeHeader extends StatelessWidget {
   const HomeHeader({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 64,
-      child: Padding(
-        padding: const EdgeInsets.only(left: 31, right: 31),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const _MenuButton(),
-            const Padding(
-              padding: EdgeInsets.only(left: 4),
-              child: Text('GemStore', style: HomeTextStyles.logo),
-            ),
-            const _NotificationButton(),
-          ],
+    return const WDiv(
+      className: 'flex flex-row items-center justify-between h-[64px] px-[31px]',
+      children: [
+        _MenuButton(),
+        WDiv(
+          className: 'pl-[4px]',
+          child: WText(
+            'GemStore',
+            className: 'text-[19px] font-bold text-black',
+          ),
         ),
-      ),
+        _NotificationButton(),
+      ],
     );
   }
 }
@@ -31,36 +26,17 @@ class HomeHeader extends StatelessWidget {
 class _MenuButton extends StatelessWidget {
   const _MenuButton();
 
-  Widget _line(double width) {
-    return Container(
-      width: width,
-      height: 2,
-      decoration: BoxDecoration(
-        color: AppColors.textDark,
-        borderRadius: BorderRadius.circular(1),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return WAnchor(
       onTap: () {},
-      behavior: HitTestBehavior.opaque,
-      child: SizedBox(
-        width: 22,
-        height: 22,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            _line(12),
-            const SizedBox(height: 6),
-            _line(20),
-            const SizedBox(height: 7),
-            _line(20),
-          ],
-        ),
+      child: const WDiv(
+        className: 'flex flex-col items-start justify-center size-[22px]',
+        children: [
+          WDiv(className: 'w-[12px] h-[2px] rounded-full bg-charcoal'),
+          WDiv(className: 'w-[20px] h-[2px] mt-[6px] rounded-full bg-charcoal'),
+          WDiv(className: 'w-[20px] h-[2px] mt-[7px] rounded-full bg-charcoal'),
+        ],
       ),
     );
   }
@@ -71,33 +47,22 @@ class _NotificationButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return WAnchor(
       onTap: () {},
-      child: SizedBox(
-        width: 24,
-        height: 26,
-        child: Stack(
-          children: [
-            Image.asset(
-              'assets/icons/bell.png',
-              width: 24,
-              height: 26,
-              color: AppColors.black,
-            ),
-            Positioned(
-              top: 4,
-              right: 4,
-              child: Container(
-                width: 7,
-                height: 7,
-                decoration: const BoxDecoration(
-                  color: AppColors.notification,
-                  shape: BoxShape.circle,
-                ),
-              ),
-            ),
-          ],
-        ),
+      child: WDiv(
+        className: 'relative w-[24px] h-[26px]',
+        children: [
+          Image.asset(
+            'assets/icons/bell.png',
+            width: 24,
+            height: 26,
+            color: Colors.black,
+          ),
+          const WDiv(
+            className:
+                'absolute top-[4px] right-[4px] size-[7px] rounded-full bg-berry',
+          ),
+        ],
       ),
     );
   }
