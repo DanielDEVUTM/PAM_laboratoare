@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../theme/app_colors.dart';
+import '../widgets/home/banner_carousel.dart';
 import '../widgets/home/category_selector.dart';
+import '../widgets/home/feature_products.dart';
 import '../widgets/home/home_header.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -20,6 +22,10 @@ class HomeScreen extends StatelessWidget {
               HomeHeader(),
               SizedBox(height: 17),
               CategorySelector(),
+              SizedBox(height: 28),
+              BannerCarousel(),
+              SizedBox(height: 34),
+              FeatureProducts(),
             ],
           ),
         ),
