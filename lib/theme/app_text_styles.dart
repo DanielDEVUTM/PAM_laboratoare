@@ -27,10 +27,18 @@ class HomeTextStyles {
     color: AppColors.categoryInactive,
   );
 
+  static const TextStyle bannerTitle = TextStyle(
+    fontFamily: AppFonts.googleSans,
+    fontSize: 22.5,
+    fontWeight: FontWeight.w700,
+    height: 1.38,
+    color: AppColors.white,
+  );
+
   static const TextStyle sectionTitle = TextStyle(
     fontFamily: AppFonts.googleSans,
-    fontSize: 20,
-    fontWeight: FontWeight.w700,
+    fontSize: 21,
+    fontWeight: FontWeight.w500,
     color: AppColors.black,
   );
 
