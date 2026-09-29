@@ -41,6 +41,24 @@ class AppData {
     image: 'assets/images/product_hero.png',
   );
 
+  /// Culorile disponibile (nume de culori din tema Wind).
+  static const List<String> productColors = ['beige', 'onyx', 'coral'];
+
+  static const List<String> productSizes = ['S', 'M', 'L'];
+
+  static const double ratingAverage = 4.9;
+  static const int ratingsCount = 83;
+  static const int reviewsCount = 47;
+
+  /// (stele, procent afisat, cat din bara e plina)
+  static const List<(int, int, double)> ratingBreakdown = [
+    (5, 80, 0.84),
+    (4, 12, 0.19),
+    (3, 5, 0.08),
+    (2, 3, 0.05),
+    (1, 0, 0),
+  ];
+
   static const String sportwearDescription =
       'Sportswear is no longer under culture, it is no longer indie or '
       'cobbled together as it once was. Sport is fashion today. The top is '
