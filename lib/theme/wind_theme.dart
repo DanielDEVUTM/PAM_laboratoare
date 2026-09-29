@@ -11,7 +11,8 @@ final WindThemeData appWindTheme = WindThemeData(
   syncWithSystem: false,
   fontFamilies: {
     'sans': 'GoogleSans', // ecranul Home
-    'mont': 'MontserratAlternates', // ecranul Product
+    'mont': 'Montserrat', // titluri pe ecranul Product
+    'body': 'MontserratAlt', // texte subtiri pe ecranul Product
   },
   colors: {
     // Text
@@ -30,6 +31,11 @@ final WindThemeData appWindTheme = WindThemeData(
     'silver': _color(0xFFA0A0A4),
     'smoke': _color(0xFFC5C5C5),
     'fog': _color(0xFFCCCBCB),
+    'haze': _color(0xFFA7A7AB),
+    'ghost': _color(0xFF99999D),
+    'cloud': _color(0xFFC8C7CC),
+    'dim': _color(0xFF4F4F4F),
+    'navy': _color(0xFF1E3354),
 
     // Fundaluri si linii
     'snow': _color(0xFFF8F8FA),
@@ -46,6 +52,7 @@ final WindThemeData appWindTheme = WindThemeData(
     'brown': _color(0xFF3A2C27),
     'berry': _color(0xFFEF466F),
     'sage': _color(0xFF508A7B),
+    'salmon': _color(0xFFFF6E6E),
 
     // Culorile produsului (Color)
     'beige': _color(0xFFE7C0A7),
@@ -53,9 +60,11 @@ final WindThemeData appWindTheme = WindThemeData(
     'coral': _color(0xFFEE6969),
   },
   borderRadius: {
-    // lg = 8 (carduri), xl = 10 (bannere), 3xl = 30 (sheet / Add To Cart)
+    // lg = 8 (carduri), xl = 10 (bannere), 2xl = 20 (sheet produs),
+    // 3xl = 23 (bara Add To Cart)
     'xl': 10,
-    '3xl': 30,
+    '2xl': 20,
+    '3xl': 23,
   },
   shadows: {
     'card': const [

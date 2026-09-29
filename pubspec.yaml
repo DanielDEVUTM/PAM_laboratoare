@@ -34,15 +34,22 @@ flutter:
           weight: 500
         - asset: assets/fonts/GoogleSans-Bold.ttf
           weight: 700
-    - family: MontserratAlternates
+    - family: Montserrat
       fonts:
-        - asset: assets/fonts/MontserratAlternates-Light.ttf
+        - asset: assets/fonts/Montserrat-Light.ttf
           weight: 300
-        - asset: assets/fonts/MontserratAlternates-Regular.ttf
+        - asset: assets/fonts/Montserrat-Regular.ttf
           weight: 400
-        - asset: assets/fonts/MontserratAlternates-Medium.ttf
+        - asset: assets/fonts/Montserrat-Medium.ttf
           weight: 500
-        - asset: assets/fonts/MontserratAlternates-SemiBold.ttf
+        - asset: assets/fonts/Montserrat-SemiBold.ttf
           weight: 600
-        - asset: assets/fonts/MontserratAlternates-Bold.ttf
+        - asset: assets/fonts/Montserrat-Bold.ttf
           weight: 700
+    # Montserrat cu "a" alternativ (ss01), folosit la textele subtiri
+    - family: MontserratAlt
+      fonts:
+        - asset: assets/fonts/MontserratAlt-Light.ttf
+          weight: 300
+        - asset: assets/fonts/MontserratAlt-Regular.ttf
+          weight: 400
