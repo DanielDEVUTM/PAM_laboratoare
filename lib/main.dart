@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttersdk_wind/fluttersdk_wind.dart';
 
 import 'screens/home_screen.dart';
 import 'screens/product_screen.dart';
-import 'theme/app_colors.dart';
-import 'theme/app_text_styles.dart';
+import 'theme/wind_theme.dart';
 
 void main() {
   runApp(const GemStoreApp());
@@ -17,19 +17,18 @@ class GemStoreApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.dark,
-      child: MaterialApp(
-        title: 'GemStore',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          fontFamily: AppFonts.googleSans,
-          scaffoldBackgroundColor: AppColors.white,
-          colorScheme: ColorScheme.fromSeed(seedColor: AppColors.brown),
+      child: WindTheme(
+        data: appWindTheme,
+        builder: (context, controller) => MaterialApp(
+          title: 'GemStore',
+          debugShowCheckedModeBanner: false,
+          theme: controller.toThemeData(),
+          initialRoute: '/',
+          routes: {
+            '/': (context) => const HomeScreen(),
+            '/product': (context) => const ProductScreen(),
+          },
         ),
-        initialRoute: '/',
-        routes: {
-          '/': (context) => const HomeScreen(),
-          '/product': (context) => const ProductScreen(),
-        },
       ),
     );
   }
