@@ -7,6 +7,7 @@ import '../widgets/home/feature_products.dart';
 import '../widgets/home/home_header.dart';
 import '../widgets/home/new_collection_banner.dart';
 import '../widgets/home/recommended_section.dart';
+import '../widgets/home/top_collection.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -26,6 +27,7 @@ class HomeScreen extends StatelessWidget {
             WDiv(className: 'mt-[34px]', child: FeatureProducts()),
             WDiv(className: 'mt-[19.5px]', child: NewCollectionBanner()),
             WDiv(className: 'mt-[36.5px]', child: RecommendedSection()),
+            WDiv(className: 'mt-[24px] pb-[17.5px]', child: TopCollection()),
           ],
         ),
       ),
