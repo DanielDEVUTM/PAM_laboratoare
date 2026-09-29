@@ -22,7 +22,7 @@ class HomeTextStyles {
 
   static const TextStyle category = TextStyle(
     fontFamily: AppFonts.googleSans,
-    fontSize: 10,
+    fontSize: 9.5,
     fontWeight: FontWeight.w400,
     color: AppColors.categoryInactive,
   );
