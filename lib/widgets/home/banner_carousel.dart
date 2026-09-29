@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fluttersdk_wind/fluttersdk_wind.dart';
 
+import '../page_dots.dart';
+
 class BannerCarousel extends StatefulWidget {
   const BannerCarousel({super.key});
 
@@ -35,7 +37,7 @@ class _BannerCarouselState extends State<BannerCarousel> {
           ),
           WDiv(
             className: 'absolute bottom-[9px] left-0 right-0',
-            child: _PageIndicator(count: _pages, current: _current),
+            child: PageDots(count: _pages, current: _current),
           ),
         ],
       ),
@@ -61,49 +63,6 @@ class _BannerPage extends StatelessWidget {
               'absolute top-[18px] left-[188px] text-[22.5px] font-bold leading-[31px] text-white',
         ),
       ],
-    );
-  }
-}
-
-class _PageIndicator extends StatelessWidget {
-  final int count;
-  final int current;
-
-  const _PageIndicator({required this.count, required this.current});
-
-  @override
-  Widget build(BuildContext context) {
-    return WDiv(
-      className: 'flex flex-row items-center justify-center',
-      children: [
-        for (int i = 0; i < count; i++)
-          WDiv(
-            className: i == 0 ? '' : (i == 1 ? 'ml-[11px]' : 'ml-[11.5px]'),
-            child: i == current ? const _ActiveDot() : const _Dot(),
-          ),
-      ],
-    );
-  }
-}
-
-class _Dot extends StatelessWidget {
-  const _Dot();
-
-  @override
-  Widget build(BuildContext context) {
-    return const WDiv(className: 'size-[4px] rounded-full bg-white');
-  }
-}
-
-class _ActiveDot extends StatelessWidget {
-  const _ActiveDot();
-
-  @override
-  Widget build(BuildContext context) {
-    return const WDiv(
-      className:
-          'flex items-center justify-center size-[10.5px] rounded-full border border-white',
-      children: [_Dot()],
     );
   }
 }
