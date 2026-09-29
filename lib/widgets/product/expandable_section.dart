@@ -7,10 +7,14 @@ class ExpandableSection extends StatefulWidget {
   final String title;
   final Widget child;
 
+  /// Padding pentru titlu si linie (continutul poate ramane pe toata latimea).
+  final String headerClassName;
+
   const ExpandableSection({
     super.key,
     required this.title,
     required this.child,
+    this.headerClassName = '',
   });
 
   @override
@@ -28,7 +32,8 @@ class _ExpandableSectionState extends State<ExpandableSection> {
         WAnchor(
           onTap: () => setState(() => _expanded = !_expanded),
           child: WDiv(
-            className: 'flex flex-row items-center justify-between h-[47px]',
+            className:
+                'flex flex-row items-center justify-between h-[47px] ${widget.headerClassName}',
             children: [
               WText(
                 widget.title,
@@ -46,7 +51,10 @@ class _ExpandableSectionState extends State<ExpandableSection> {
             ],
           ),
         ),
-        const WDiv(className: 'h-[1px] bg-divider'),
+        WDiv(
+          className: widget.headerClassName,
+          child: const WDiv(className: 'h-[1px] bg-divider'),
+        ),
         if (_expanded) widget.child,
       ],
     );

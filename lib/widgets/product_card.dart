@@ -9,6 +9,9 @@ class ProductCard extends StatelessWidget {
   final Product product;
   final String nameClassName;
   final String priceClassName;
+
+  /// Distanta dintre poza si nume.
+  final String nameMargin;
   final VoidCallback? onTap;
 
   const ProductCard({
@@ -16,6 +19,7 @@ class ProductCard extends StatelessWidget {
     required this.product,
     required this.nameClassName,
     required this.priceClassName,
+    this.nameMargin = 'mt-[14px]',
     this.onTap,
   });
 
@@ -30,7 +34,7 @@ class ProductCard extends StatelessWidget {
             src: 'asset://${product.image}',
             className: 'w-[126px] h-[172px] rounded-lg object-cover',
           ),
-          WText(product.name, className: 'mt-[14px] truncate $nameClassName'),
+          WText(product.name, className: '$nameMargin truncate $nameClassName'),
           WText(
             product.formattedPrice,
             className: 'mt-[4.5px] $priceClassName',
