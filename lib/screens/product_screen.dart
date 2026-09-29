@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttersdk_wind/fluttersdk_wind.dart';
 
 import '../data/app_data.dart';
+import '../widgets/product/add_to_cart_bar.dart';
 import '../widgets/product/expandable_section.dart';
 import '../widgets/product/product_description.dart';
 import '../widgets/product/product_header.dart';
@@ -9,6 +10,7 @@ import '../widgets/product/product_hero.dart';
 import '../widgets/product/product_options.dart';
 import '../widgets/product/rating_summary.dart';
 import '../widgets/product/review_tile.dart';
+import '../widgets/product/similar_products.dart';
 
 class ProductScreen extends StatelessWidget {
   const ProductScreen({super.key});
@@ -19,28 +21,45 @@ class ProductScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: context.wColorExt('cream'),
+      bottomNavigationBar: AddToCartBar(
+        onTap: () => ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Sportwear Set a fost adaugat in cos')),
+        ),
+      ),
       body: WDiv(
         className: 'flex flex-col items-stretch overflow-y-auto',
         children: [
           ProductHero(image: product.image),
           const WDiv(
             className:
-                'flex flex-col items-stretch px-[32px] pt-[50.5px] pb-[40px] bg-white rounded-t-2xl shadow-sheet',
+                'flex flex-col items-stretch pt-[50.5px] pb-[38px] bg-white rounded-t-2xl shadow-sheet',
             children: [
-              ProductHeader(
-                product: product,
-                ratingsCount: AppData.ratingsCount,
+              WDiv(
+                className: 'flex flex-col items-stretch px-[32px]',
+                children: [
+                  ProductHeader(
+                    product: product,
+                    ratingsCount: AppData.ratingsCount,
+                  ),
+                  WDiv(className: 'h-[1px] mt-[16px] bg-divider'),
+                  WDiv(className: 'mt-[16px]', child: ProductOptions()),
+                  WDiv(className: 'h-[1px] mt-[32px] bg-divider'),
+                  ExpandableSection(
+                    title: 'Description',
+                    child: ProductDescription(
+                      text: AppData.sportwearDescription,
+                    ),
+                  ),
+                  ExpandableSection(title: 'Reviews', child: _Reviews()),
+                ],
               ),
-              WDiv(className: 'h-[1px] mt-[16px] bg-divider'),
-              WDiv(className: 'mt-[16px]', child: ProductOptions()),
-              WDiv(className: 'h-[1px] mt-[32px] bg-divider'),
-              ExpandableSection(
-                title: 'Description',
-                child: ProductDescription(text: AppData.sportwearDescription),
-              ),
-              ExpandableSection(
-                title: 'Reviews',
-                child: _Reviews(),
+              WDiv(
+                className: 'mt-[13.5px]',
+                child: ExpandableSection(
+                  title: 'Similar Product',
+                  headerClassName: 'px-[31px]',
+                  child: SimilarProducts(),
+                ),
               ),
             ],
           ),
