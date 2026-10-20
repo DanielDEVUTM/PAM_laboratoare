@@ -260,13 +260,13 @@
     },
     {
       "id": "p9",
-      "name": "Leather Shoulder Bag",
+      "name": "Round Sunglasses",
       "category": "accessories",
-      "price": 65.5,
-      "image": "assets/images/collection_1.jpg",
+      "price": 24.5,
+      "image": "assets/images/product_sunglasses.jpg",
       "rating": 4.8,
       "ratings_count": 27,
-      "description": "Compact shoulder bag made of genuine leather with a detachable strap.",
+      "description": "Retro round sunglasses with a thin metal frame and UV400 protection.",
       "colors": [
         "onyx",
         "beige"
@@ -287,17 +287,22 @@
     },
     {
       "id": "p10",
-      "name": "Summer Straw Hat",
-      "category": "accessories",
-      "price": 19.9,
-      "image": "assets/images/collection_2.jpg",
+      "name": "Yellow Wrap Dress",
+      "category": "women",
+      "price": 54.9,
+      "image": "assets/images/product_wrap_dress.jpg",
       "rating": 3.9,
       "ratings_count": 11,
-      "description": "Lightweight straw hat that protects from the sun on hot summer days.",
+      "description": "Flowy wrap dress with a tie belt. Light and comfortable for summer days.",
       "colors": [
-        "beige"
+        "beige",
+        "coral"
       ],
-      "sizes": [],
+      "sizes": [
+        "S",
+        "M",
+        "L"
+      ],
       "is_featured": false,
       "is_recommended": false,
       "created_at": "2026-05-21",
@@ -305,22 +310,21 @@
     },
     {
       "id": "p11",
-      "name": "Office Shirt",
-      "category": "men",
-      "price": 34.5,
-      "image": "assets/images/collection_3.jpg",
+      "name": "Linen Suit",
+      "category": "women",
+      "price": 96.0,
+      "image": "assets/images/product_linen_suit.jpg",
       "rating": 4.0,
       "ratings_count": 33,
-      "description": "Slim-fit office shirt made of easy-iron cotton.",
+      "description": "Relaxed two-piece linen suit: oversized blazer and wide-leg trousers.",
       "colors": [
-        "beige",
-        "onyx"
+        "onyx",
+        "beige"
       ],
       "sizes": [
         "S",
         "M",
-        "L",
-        "XL"
+        "L"
       ],
       "is_featured": false,
       "is_recommended": false,
@@ -367,17 +371,20 @@
     },
     {
       "id": "p13",
-      "name": "Rose Lip Balm",
-      "category": "beauty",
-      "price": 9.99,
-      "image": "assets/images/banner.jpg",
+      "name": "Red Jumpsuit",
+      "category": "women",
+      "price": 68.0,
+      "image": "assets/images/product_jumpsuit.jpg",
       "rating": 4.6,
       "ratings_count": 72,
-      "description": "Moisturizing lip balm with rose oil and vitamin E.",
+      "description": "Short sleeve jumpsuit with a belted waist and wide trousers.",
       "colors": [
         "coral"
       ],
-      "sizes": [],
+      "sizes": [
+        "S",
+        "M"
+      ],
       "is_featured": false,
       "is_recommended": false,
       "created_at": "2026-09-18",
@@ -385,18 +392,22 @@
     },
     {
       "id": "p14",
-      "name": "Autumn Glow Palette",
-      "category": "beauty",
-      "price": 28.0,
-      "image": "assets/images/new_collection.jpg",
+      "name": "Basic White Tee",
+      "category": "women",
+      "price": 18.0,
+      "image": "assets/images/collection_3.jpg",
       "rating": 4.4,
       "ratings_count": 40,
-      "description": "Eyeshadow palette with 12 warm autumn shades, matte and shimmer.",
+      "description": "Everyday white T-shirt made of soft organic cotton.",
       "colors": [
-        "beige",
-        "coral"
+        "beige"
       ],
-      "sizes": [],
+      "sizes": [
+        "XS",
+        "S",
+        "M",
+        "L"
+      ],
       "is_featured": false,
       "is_recommended": false,
       "created_at": "2026-10-05",
