@@ -14,7 +14,9 @@ class ProductsCubit extends Cubit<ProductsState> {
   ProductsCubit(this.repository) : super(const ProductsState());
 
   Future<void> load() async {
-    emit(state.copyWith(status: ProductsStatus.loading, errorMessage: () => null));
+    emit(
+      state.copyWith(status: ProductsStatus.loading, errorMessage: () => null),
+    );
     try {
       final catalog = await repository.loadCatalog();
       _emitFiltered(
@@ -33,8 +35,7 @@ class ProductsCubit extends Cubit<ProductsState> {
     }
   }
 
-  void search(String query) =>
-      _emitFiltered(state.copyWith(query: query.trim()));
+  void search(String query) => _emitFiltered(state.copyWith(query: query));
 
   /// [categoryId] null afiseaza toate categoriile.
   void selectCategory(String? categoryId) =>
@@ -61,9 +62,10 @@ class ProductsCubit extends Cubit<ProductsState> {
   }
 
   static List<Product> _apply(ProductsState s) {
-    final query = s.query.toLowerCase();
+    final query = s.query.trim().toLowerCase();
     final result = s.allProducts.where((p) {
-      final matchesCategory = s.categoryId == null || p.category == s.categoryId;
+      final matchesCategory =
+          s.categoryId == null || p.category == s.categoryId;
       final matchesQuery =
           query.isEmpty ||
           p.name.toLowerCase().contains(query) ||

@@ -41,13 +41,12 @@ class ProductsState extends Equatable {
     this.errorMessage,
   });
 
-  List<Product> get featured =>
-      allProducts.where((p) => p.isFeatured).toList();
+  List<Product> get featured => allProducts.where((p) => p.isFeatured).toList();
 
   List<Product> get recommended =>
       allProducts.where((p) => p.isRecommended).toList();
 
-  bool get hasFilters => query.isNotEmpty || categoryId != null;
+  bool get hasFilters => query.trim().isNotEmpty || categoryId != null;
 
   Product? productById(String id) {
     for (final product in allProducts) {
