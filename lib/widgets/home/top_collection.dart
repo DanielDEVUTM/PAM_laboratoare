@@ -5,15 +5,17 @@ import 'collection_label.dart';
 import 'section_header.dart';
 
 class TopCollection extends StatelessWidget {
-  const TopCollection({super.key});
+  final VoidCallback? onShowAll;
+
+  const TopCollection({super.key, this.onShowAll});
 
   @override
   Widget build(BuildContext context) {
-    return const WDiv(
+    return WDiv(
       className: 'flex flex-col items-stretch',
       children: [
-        SectionHeader(title: 'Top Collection'),
-        WDiv(
+        SectionHeader(title: 'Top Collection', onShowAll: onShowAll),
+        const WDiv(
           className: 'flex flex-col items-stretch mt-[29.5px] px-[32px]',
           children: [
             _CollectionCard(
@@ -24,8 +26,7 @@ class TopCollection extends StatelessWidget {
                 CollectionLabel('Sale up to 40%'),
                 WText(
                   'FOR SLIM\n& BEAUTY',
-                  className:
-                      'mt-[23px] text-[19px] font-light leading-[24px] text-dusk',
+                  className: 'mt-[23px] text-[19px] font-light leading-[24px] text-dusk',
                 ),
               ],
             ),
@@ -39,8 +40,7 @@ class TopCollection extends StatelessWidget {
                   CollectionLabel('Summer Collection 2021'),
                   WText(
                     'Most sexy\n& fabulous\ndesign',
-                    className:
-                        'mt-[23px] text-[18px] font-bold leading-[30px] text-graphite',
+                    className: 'mt-[23px] text-[18px] font-bold leading-[30px] text-graphite',
                   ),
                 ],
               ),
@@ -58,8 +58,7 @@ class TopCollection extends StatelessWidget {
                       WText('T-Shirts', className: 'text-[12.5px] text-steel'),
                       WText(
                         'The\nOffice\nLife',
-                        className:
-                            'mt-[14px] text-[16px] font-light leading-[21px] text-ink',
+                        className: 'mt-[14px] text-[16px] font-light leading-[21px] text-ink',
                       ),
                     ],
                   ),
@@ -74,8 +73,7 @@ class TopCollection extends StatelessWidget {
                       WText('Dresses', className: 'text-[12.5px] text-steel'),
                       WText(
                         'Elegant\nDesign',
-                        className:
-                            'mt-[18px] text-[16.5px] font-light leading-[22px] text-ink',
+                        className: 'mt-[18px] text-[16.5px] font-light leading-[22px] text-ink',
                       ),
                     ],
                   ),

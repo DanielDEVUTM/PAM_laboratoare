@@ -1,28 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:fluttersdk_wind/fluttersdk_wind.dart';
 
-import '../../data/app_data.dart';
 import '../../models/product.dart';
+import '../../routes.dart';
 import 'section_header.dart';
 
 class RecommendedSection extends StatelessWidget {
-  const RecommendedSection({super.key});
+  final List<Product> products;
+  final VoidCallback? onShowAll;
+
+  const RecommendedSection({super.key, required this.products, this.onShowAll});
 
   @override
   Widget build(BuildContext context) {
     return WDiv(
       className: 'flex flex-col items-stretch',
       children: [
-        const SectionHeader(title: 'Recommended'),
+        SectionHeader(title: 'Recommended', onShowAll: onShowAll),
         WDiv(
           className: 'overflow-x-auto mt-[26.5px]',
           child: WDiv(
-            className: 'flex flex-row items-start gap-[16px] px-[32px] pb-[10px]',
+            className:
+                'flex flex-row items-start gap-[16px] px-[32px] pb-[10px]',
             children: [
-              for (final product in AppData.recommended)
+              for (final product in products)
                 _RecommendedCard(
                   product: product,
-                  onTap: () => Navigator.pushNamed(context, '/product'),
+                  onTap: () => Routes.openProduct(context, product.id),
                 ),
             ],
           ),
@@ -43,8 +47,7 @@ class _RecommendedCard extends StatelessWidget {
     return WAnchor(
       onTap: onTap,
       child: WDiv(
-        className:
-            'flex flex-row items-center w-[213px] h-[66px] bg-white rounded-lg border border-line shadow-card',
+        className: 'flex flex-row items-center w-[213px] h-[66px] bg-white rounded-lg border border-line shadow-card',
         children: [
           WImage(
             src: 'asset://${product.image}',

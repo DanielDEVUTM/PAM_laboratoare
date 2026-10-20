@@ -1,34 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:fluttersdk_wind/fluttersdk_wind.dart';
 
-class CategorySelector extends StatefulWidget {
-  const CategorySelector({super.key});
+import '../../models/category.dart';
 
-  @override
-  State<CategorySelector> createState() => _CategorySelectorState();
-}
+/// Categoriile din JSON; apasarea deschide Discover filtrat pe categorie.
+class CategorySelector extends StatelessWidget {
+  final List<Category> categories;
+  final String? selectedId;
+  final ValueChanged<String> onSelected;
 
-class _CategorySelectorState extends State<CategorySelector> {
-  static const List<(String, String)> _categories = [
-    ('Women', 'assets/icons/women.png'),
-    ('Men', 'assets/icons/men.png'),
-    ('Accessories', 'assets/icons/accessories.png'),
-    ('Beauty', 'assets/icons/beauty.png'),
-  ];
-
-  int _selected = 0;
+  const CategorySelector({
+    super.key,
+    required this.categories,
+    required this.selectedId,
+    required this.onSelected,
+  });
 
   @override
   Widget build(BuildContext context) {
     return WDiv(
       className: 'flex flex-row justify-between pl-[21px] pr-[18px]',
       children: [
-        for (int i = 0; i < _categories.length; i++)
+        for (final category in categories)
           _CategoryItem(
-            label: _categories[i].$1,
-            icon: _categories[i].$2,
-            selected: i == _selected,
-            onTap: () => setState(() => _selected = i),
+            label: category.name,
+            icon: category.icon,
+            selected: category.id == selectedId,
+            onTap: () => onSelected(category.id),
           ),
       ],
     );
