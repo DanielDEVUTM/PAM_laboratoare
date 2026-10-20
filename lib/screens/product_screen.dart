@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttersdk_wind/fluttersdk_wind.dart';
 
-import '../data/app_data.dart';
+import '../cubits/products/products_cubit.dart';
+import '../models/product.dart';
+import '../widgets/common/screen_header.dart';
+import '../widgets/common/state_views.dart';
 import '../widgets/product/add_to_cart_bar.dart';
 import '../widgets/product/expandable_section.dart';
 import '../widgets/product/product_description.dart';
@@ -12,55 +16,91 @@ import '../widgets/product/rating_summary.dart';
 import '../widgets/product/review_tile.dart';
 import '../widgets/product/similar_products.dart';
 
+/// Pagina de detalii. Primeste id-ul produsului ca argument al rutei.
 class ProductScreen extends StatelessWidget {
-  const ProductScreen({super.key});
+  final String productId;
+
+  const ProductScreen({super.key, required this.productId});
 
   @override
   Widget build(BuildContext context) {
-    const product = AppData.sportwearSet;
+    final state = context.watch<ProductsCubit>().state;
+    final product = state.productById(productId);
+
+    if (product == null) {
+      return const Scaffold(
+        backgroundColor: Colors.white,
+        body: SafeArea(
+          child: Column(
+            children: [
+              ScreenHeader(title: 'Product'),
+              Expanded(
+                child: EmptyView(
+                  title: 'Product not found',
+                  message: 'This product is no longer available.',
+                  icon: Icons.inventory_2_outlined,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    final similar = state.similarTo(product);
 
     return Scaffold(
       backgroundColor: context.wColorExt('cream'),
       bottomNavigationBar: AddToCartBar(
-        onTap: () => ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Sportwear Set a fost adaugat in cos')),
-        ),
+        onTap: () => ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(
+            SnackBar(content: Text('${product.name} a fost adaugat in cos')),
+          ),
       ),
       body: WDiv(
         className: 'flex flex-col items-stretch overflow-y-auto',
         children: [
-          ProductHero(image: product.image),
-          const WDiv(
-            className:
-                'flex flex-col items-stretch pt-[50.5px] pb-[38px] bg-white rounded-t-2xl shadow-sheet',
+          ProductHero(productId: product.id, image: product.image),
+          WDiv(
+            className: 'flex flex-col items-stretch pt-[50.5px] pb-[38px] bg-white rounded-t-2xl shadow-sheet',
             children: [
               WDiv(
                 className: 'flex flex-col items-stretch px-[32px]',
                 children: [
-                  ProductHeader(
-                    product: product,
-                    ratingsCount: AppData.ratingsCount,
-                  ),
-                  WDiv(className: 'h-[1px] mt-[16px] bg-divider'),
-                  WDiv(className: 'mt-[16px]', child: ProductOptions()),
-                  WDiv(className: 'h-[1px] mt-[32px] bg-divider'),
+                  ProductHeader(product: product),
+                  const WDiv(className: 'h-[1px] mt-[16px] bg-divider'),
+                  if (product.colors.isNotEmpty ||
+                      product.sizes.isNotEmpty) ...[
+                    WDiv(
+                      className: 'mt-[16px]',
+                      child: ProductOptions(
+                        key: ValueKey(product.id),
+                        colors: product.colors,
+                        sizes: product.sizes,
+                      ),
+                    ),
+                    const WDiv(className: 'h-[1px] mt-[32px] bg-divider'),
+                  ],
                   ExpandableSection(
                     title: 'Description',
-                    child: ProductDescription(
-                      text: AppData.sportwearDescription,
-                    ),
+                    child: ProductDescription(text: product.description),
                   ),
-                  ExpandableSection(title: 'Reviews', child: _Reviews()),
+                  ExpandableSection(
+                    title: 'Reviews',
+                    child: _Reviews(product: product),
+                  ),
                 ],
               ),
-              WDiv(
-                className: 'mt-[13.5px]',
-                child: ExpandableSection(
-                  title: 'Similar Product',
-                  headerClassName: 'px-[31px]',
-                  child: SimilarProducts(),
+              if (similar.isNotEmpty)
+                WDiv(
+                  className: 'mt-[13.5px]',
+                  child: ExpandableSection(
+                    title: 'Similar Product',
+                    headerClassName: 'px-[31px]',
+                    child: SimilarProducts(products: similar),
+                  ),
                 ),
-              ),
             ],
           ),
         ],
@@ -70,18 +110,27 @@ class ProductScreen extends StatelessWidget {
 }
 
 class _Reviews extends StatelessWidget {
-  const _Reviews();
+  final Product product;
+
+  const _Reviews({required this.product});
 
   @override
   Widget build(BuildContext context) {
+    final reviews = product.reviews;
+
     return WDiv(
-      className: 'flex flex-col items-stretch pt-[28.5px]',
+      className: 'flex flex-col items-stretch pt-[28.5px] pb-[20px]',
       children: [
-        const RatingSummary(),
-        for (int i = 0; i < AppData.reviews.length; i++)
+        RatingSummary(product: product),
+        if (reviews.isEmpty)
+          const WText(
+            'No reviews yet. Be the first to write one!',
+            className: 'mt-[30px] font-body font-light text-[11px] text-silver',
+          ),
+        for (int i = 0; i < reviews.length; i++)
           WDiv(
             className: i == 0 ? 'mt-[39.5px]' : 'mt-[34px]',
-            child: ReviewTile(review: AppData.reviews[i]),
+            child: ReviewTile(review: reviews[i]),
           ),
       ],
     );

@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:fluttersdk_wind/fluttersdk_wind.dart';
 
+import '../common/favorite_button.dart';
 import '../page_dots.dart';
 
 /// Partea de sus a ecranului: poza produsului (carusel), inapoi si favorit.
 class ProductHero extends StatefulWidget {
+  final String productId;
   final String image;
 
-  const ProductHero({super.key, required this.image});
+  const ProductHero({super.key, required this.productId, required this.image});
 
   @override
   State<ProductHero> createState() => _ProductHeroState();
@@ -18,7 +20,6 @@ class _ProductHeroState extends State<ProductHero> {
 
   final PageController _controller = PageController();
   int _current = 0;
-  bool _favorite = true;
 
   @override
   void dispose() {
@@ -54,13 +55,7 @@ class _ProductHeroState extends State<ProductHero> {
         ),
         WDiv(
           className: 'absolute top-[${top}px] right-[33px]',
-          child: _CircleButton(
-            onTap: () => setState(() => _favorite = !_favorite),
-            child: WIcon(
-              _favorite ? Icons.favorite : Icons.favorite_border,
-              className: 'text-[18px] text-salmon',
-            ),
-          ),
+          child: FavoriteButton(productId: widget.productId),
         ),
         WDiv(
           className: 'absolute bottom-[11.75px] left-0 right-0',
@@ -82,8 +77,7 @@ class _CircleButton extends StatelessWidget {
     return WAnchor(
       onTap: onTap,
       child: WDiv(
-        className:
-            'flex items-center justify-center size-[32px] rounded-full bg-white shadow-button',
+        className: 'flex items-center justify-center size-[32px] rounded-full bg-white shadow-button',
         children: [child],
       ),
     );

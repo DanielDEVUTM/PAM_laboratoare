@@ -7,13 +7,8 @@ import '../star_rating.dart';
 /// Numele, pretul si ratingul produsului.
 class ProductHeader extends StatelessWidget {
   final Product product;
-  final int ratingsCount;
 
-  const ProductHeader({
-    super.key,
-    required this.product,
-    required this.ratingsCount,
-  });
+  const ProductHeader({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
@@ -30,10 +25,11 @@ class ProductHeader extends StatelessWidget {
             WDiv(
               className: 'flex flex-row items-center mt-[15.5px]',
               children: [
-                const StarRating(),
+                StarRating(rating: product.rating.round()),
                 WText(
-                  '($ratingsCount)',
-                  className: 'ml-[5px] mt-[3px] font-body text-[11px] text-soot',
+                  '(${product.ratingsCount})',
+                  className:
+                      'ml-[5px] mt-[3px] font-body text-[11px] text-soot',
                 ),
               ],
             ),

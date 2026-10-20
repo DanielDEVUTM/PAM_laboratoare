@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:fluttersdk_wind/fluttersdk_wind.dart';
 
-import '../../data/app_data.dart';
-
 /// Alegerea culorii si a marimii.
 class ProductOptions extends StatefulWidget {
-  const ProductOptions({super.key});
+  /// Nume de culori din tema Wind.
+  final List<String> colors;
+  final List<String> sizes;
+
+  const ProductOptions({super.key, required this.colors, required this.sizes});
 
   @override
   State<ProductOptions> createState() => _ProductOptionsState();
@@ -13,51 +15,62 @@ class ProductOptions extends StatefulWidget {
 
 class _ProductOptionsState extends State<ProductOptions> {
   int _color = 0;
-  int _size = 2;
+  late int _size = widget.sizes.length > 2 ? 2 : 0;
 
   @override
   Widget build(BuildContext context) {
+    // Cu mai mult de 3 marimi, coloana Color se ingusteaza ca sa incapa.
+    final colorWidth = widget.sizes.length > 3 ? 'w-[150px]' : 'w-[197px]';
+
     return WDiv(
       className: 'flex flex-row items-start',
       children: [
-        WDiv(
-          className: 'w-[197px] flex flex-col items-start',
-          children: [
-            const WText('Color', className: 'font-body text-[13.5px] text-dusk'),
-            WDiv(
-              className: 'flex flex-row items-center gap-[10px] mt-[11.5px] ml-[1px]',
-              children: [
-                for (int i = 0; i < AppData.productColors.length; i++)
-                  WAnchor(
-                    onTap: () => setState(() => _color = i),
-                    child: _Swatch(
-                      color: AppData.productColors[i],
-                      selected: i == _color,
+        if (widget.colors.isNotEmpty)
+          WDiv(
+            className: '$colorWidth flex flex-col items-start',
+            children: [
+              const WText(
+                'Color',
+                className: 'font-body text-[13.5px] text-dusk',
+              ),
+              WDiv(
+                className: 'flex flex-row items-center gap-[10px] mt-[11.5px] ml-[1px]',
+                children: [
+                  for (int i = 0; i < widget.colors.length; i++)
+                    WAnchor(
+                      onTap: () => setState(() => _color = i),
+                      child: _Swatch(
+                        color: widget.colors[i],
+                        selected: i == _color,
+                      ),
                     ),
-                  ),
-              ],
-            ),
-          ],
-        ),
-        WDiv(
-          className: 'flex-1 flex flex-col items-start',
-          children: [
-            const WText('Size', className: 'font-body text-[13.5px] text-dusk'),
-            WDiv(
-              className: 'flex flex-row items-center gap-[7.5px] mt-[11.5px]',
-              children: [
-                for (int i = 0; i < AppData.productSizes.length; i++)
-                  WAnchor(
-                    onTap: () => setState(() => _size = i),
-                    child: _SizeChip(
-                      label: AppData.productSizes[i],
-                      selected: i == _size,
+                ],
+              ),
+            ],
+          ),
+        if (widget.sizes.isNotEmpty)
+          WDiv(
+            className: 'flex-1 flex flex-col items-start',
+            children: [
+              const WText(
+                'Size',
+                className: 'font-body text-[13.5px] text-dusk',
+              ),
+              WDiv(
+                className: 'flex flex-row items-center gap-[7.5px] mt-[11.5px]',
+                children: [
+                  for (int i = 0; i < widget.sizes.length; i++)
+                    WAnchor(
+                      onTap: () => setState(() => _size = i),
+                      child: _SizeChip(
+                        label: widget.sizes[i],
+                        selected: i == _size,
+                      ),
                     ),
-                  ),
-              ],
-            ),
-          ],
-        ),
+                ],
+              ),
+            ],
+          ),
       ],
     );
   }
@@ -75,8 +88,7 @@ class _Swatch extends StatelessWidget {
     if (!selected) return circle;
 
     return WDiv(
-      className:
-          'flex items-center justify-center size-[34px] rounded-full bg-white shadow-swatch',
+      className: 'flex items-center justify-center size-[34px] rounded-full bg-white shadow-swatch',
       children: [circle],
     );
   }
@@ -94,7 +106,8 @@ class _SizeChip extends StatelessWidget {
     final text = selected ? 'text-white' : 'text-smoke';
 
     return WDiv(
-      className: 'flex items-center justify-center size-[33px] rounded-full $bg',
+      className:
+          'flex items-center justify-center size-[33px] rounded-full $bg',
       children: [
         WText(label, className: 'font-mont text-[12.5px] font-semibold $text'),
       ],
