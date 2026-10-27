@@ -154,6 +154,19 @@ void main() {
     expect(sportwear.similarProducts.length, 3);
     expect(sportwear.isFavorite, isTrue);
     expect(sportwear.formattedPrice, '\$ 80.00');
+
+    // produsele fara detalii in JSON folosesc pagina din productPage
+    final dress = data.products.firstWhere((p) => p.id == 'p002');
+    expect(dress.name, 'Long Sleeve Dress');
+    expect(dress.price, 45.0);
+    expect(dress.hasDetails, isTrue);
+    expect(dress.reviews.length, 2);
+    expect(dress.colors.length, 3);
+    expect(dress.isFavorite, isFalse);
+
+    // un produs similar nu apare in propria lista de produse similare
+    final hoodie = data.products.firstWhere((p) => p.id == 'p006');
+    expect(hoodie.similarProducts.map((p) => p.id), ['p007', 'p008']);
   });
 
   test('FavoritesCubit adauga si elimina', () {

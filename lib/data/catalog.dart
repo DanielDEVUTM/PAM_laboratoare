@@ -12,7 +12,8 @@ class Catalog {
   final List<CategoryPromo> categoryPromos;
 
   /// Toate produsele, fara duplicate: din Feature Products, Recommended si
-  /// Similar Product. Produsul din `productPage` vine cu toate detaliile.
+  /// Similar Product. Detaliile vin din `productPage`; produsele care in JSON
+  /// au doar nume, pret si poza primesc restul detaliilor de acolo.
   final List<Product> products;
 
   const Catalog({
@@ -64,6 +65,13 @@ class Catalog {
       byId[detailed.id] = detailed;
     }
 
+    // JSON-ul are pagina de detalii doar pentru un produs; celelalte produse
+    // folosesc aceeasi pagina (cu numele, pretul si poza lor).
+    final products = [
+      for (final p in byId.values)
+        detailed == null ? p : p.withDetailsFrom(detailed),
+    ];
+
     return Catalog(
       storeName: home['storeName'] as String? ?? '',
       categories: list(home, 'categories', Category.fromJson),
@@ -75,7 +83,7 @@ class Catalog {
           : Collection.fromJson(home['newCollection'] as Map<String, dynamic>),
       topCollections: list(home, 'topCollections', Collection.fromJson),
       categoryPromos: list(home, 'categoryPromos', CategoryPromo.fromJson),
-      products: byId.values.toList(),
+      products: products,
     );
   }
 }

@@ -165,6 +165,39 @@ class Product extends Equatable {
     return '$symbol${price.toStringAsFixed(2)}';
   }
 
+  /// Pentru un produs care in JSON are doar nume, pret si poza: ia restul
+  /// pagini de detalii (rating, culori, marimi, descriere, recenzii, produse
+  /// similare) din [template], adica din `productPage` al JSON-ului.
+  Product withDetailsFrom(Product template) {
+    if (hasDetails) return this;
+    return Product(
+      id: id,
+      name: name,
+      price: price,
+      currency: currency,
+      imageUrl: imageUrl,
+      rating: template.rating,
+      ratingCount: template.ratingCount,
+      reviewCount: template.reviewCount,
+      description: template.description,
+      descriptionExpanded: template.descriptionExpanded,
+      colors: template.colors,
+      selectedColor: template.selectedColor,
+      sizes: template.sizes,
+      selectedSize: template.selectedSize,
+      sizeAvailability: template.sizeAvailability,
+      ratingBreakdown: template.ratingBreakdown,
+      reviews: template.reviews,
+      similarProducts: [
+        for (final p in template.similarProducts)
+          if (p.id != id) p,
+      ],
+      canAddToCart: template.canAddToCart,
+      addToCartLabel: template.addToCartLabel,
+      sections: sections,
+    );
+  }
+
   Product copyWith({Set<ProductSection>? sections}) {
     return Product(
       id: id,
