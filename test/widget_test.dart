@@ -33,9 +33,6 @@ void main() {
     expect(find.text('Feature Products'), findsOneWidget);
     expect(find.text('Turtleneck Sweater'), findsOneWidget);
 
-    // p003 e favorit din JSON ("isFavorite": true)
-    expect(find.text('1'), findsOneWidget);
-
     await tester.tap(find.text('Sportwear Set'));
     await tester.pumpAndSettle();
     expect(find.text('Add To Cart'), findsOneWidget);
@@ -60,6 +57,8 @@ void main() {
     await tester.tap(find.text('Show all').first);
     await tester.pumpAndSettle();
     expect(find.text('Discover'), findsOneWidget);
+    // p003 e favorit din JSON ("isFavorite": true)
+    expect(find.text('1'), findsOneWidget);
 
     await tester.enterText(find.byType(TextField), 'zzzz');
     await tester.pumpAndSettle();

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:fluttersdk_wind/fluttersdk_wind.dart';
 
 import '../../routes.dart';
-import '../common/favorite_button.dart';
 
 class HomeHeader extends StatelessWidget {
   final String storeName;
@@ -23,7 +22,7 @@ class HomeHeader extends StatelessWidget {
             className: 'text-[19px] font-bold text-black',
           ),
         ),
-        const _Actions(),
+        const _NotificationButton(),
       ],
     );
   }
@@ -34,6 +33,7 @@ class _MenuButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Meniul deschide Discover (cautare, filtre, sortare, favorite).
     return WAnchor(
       onTap: () => Navigator.pushNamed(context, Routes.catalog),
       child: const WDiv(
@@ -44,26 +44,6 @@ class _MenuButton extends StatelessWidget {
           WDiv(className: 'w-[20px] h-[2px] mt-[7px] rounded-full bg-charcoal'),
         ],
       ),
-    );
-  }
-}
-
-class _Actions extends StatelessWidget {
-  const _Actions();
-
-  @override
-  Widget build(BuildContext context) {
-    return WDiv(
-      className: 'flex flex-row items-center',
-      children: [
-        WDiv(
-          className: 'mr-[14px]',
-          child: FavoritesBadge(
-            onTap: () => Navigator.pushNamed(context, Routes.favorites),
-          ),
-        ),
-        const _NotificationButton(),
-      ],
     );
   }
 }

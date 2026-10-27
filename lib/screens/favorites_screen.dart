@@ -4,6 +4,7 @@ import 'package:fluttersdk_wind/fluttersdk_wind.dart';
 
 import '../cubits/favorites/favorites_cubit.dart';
 import '../cubits/products/products_cubit.dart';
+import '../data/design_images.dart';
 import '../models/product.dart';
 import '../routes.dart';
 import '../widgets/common/app_image.dart';
@@ -71,7 +72,7 @@ class _FavoriteTile extends StatelessWidget {
         className: 'flex flex-row items-center h-[96px] bg-white rounded-lg border border-line shadow-card',
         children: [
           AppImage(
-            product.imageUrl,
+            DesignImages.of(product.id, product.imageUrl),
             width: 84,
             height: 96,
             borderRadius: const BorderRadius.horizontal(

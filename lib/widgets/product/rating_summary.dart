@@ -117,7 +117,7 @@ class _RatingBar extends StatelessWidget {
           ),
         ),
         WDiv(
-          className: 'w-[30px] flex flex-row justify-end',
+          className: 'w-[24px] flex flex-row justify-end',
           children: [
             WText(
               '$percent%',

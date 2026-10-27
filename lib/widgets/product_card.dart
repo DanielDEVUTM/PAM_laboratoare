@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttersdk_wind/fluttersdk_wind.dart';
 
+import '../data/design_images.dart';
 import '../models/product.dart';
 import 'common/app_image.dart';
 
@@ -32,7 +33,7 @@ class ProductCard extends StatelessWidget {
         className: 'flex flex-col items-start w-[126px]',
         children: [
           AppImage(
-            product.imageUrl,
+            DesignImages.of(product.id, product.imageUrl),
             width: 126,
             height: 172,
             borderRadius: BorderRadius.circular(8),

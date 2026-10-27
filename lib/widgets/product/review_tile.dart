@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttersdk_wind/fluttersdk_wind.dart';
 
+import '../../data/design_images.dart';
 import '../../models/review.dart';
 import '../common/app_image.dart';
 import '../star_rating.dart';
@@ -21,7 +22,7 @@ class ReviewTile extends StatelessWidget {
             WDiv(
               className: 'ml-[1.5px]',
               child: AppImage(
-                review.avatarUrl,
+                DesignImages.of(review.id, review.avatarUrl),
                 width: 36,
                 height: 36,
                 borderRadius: BorderRadius.circular(18),

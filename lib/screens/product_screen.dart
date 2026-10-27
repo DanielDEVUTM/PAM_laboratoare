@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttersdk_wind/fluttersdk_wind.dart';
 
 import '../cubits/products/products_cubit.dart';
+import '../data/design_images.dart';
 import '../models/product.dart';
 import '../widgets/common/screen_header.dart';
 import '../widgets/common/state_views.dart';
@@ -66,7 +67,10 @@ class ProductScreen extends StatelessWidget {
       body: WDiv(
         className: 'flex flex-col items-stretch overflow-y-auto',
         children: [
-          ProductHero(productId: product.id, images: product.images),
+          ProductHero(
+            productId: product.id,
+            image: DesignImages.heroOf(product.id, product.imageUrl),
+          ),
           WDiv(
             className: 'flex flex-col items-stretch pt-[50.5px] pb-[38px] bg-white rounded-t-2xl shadow-sheet',
             children: [
@@ -89,7 +93,6 @@ class ProductScreen extends StatelessWidget {
                   if (product.description.isNotEmpty)
                     ExpandableSection(
                       title: 'Description',
-                      initiallyExpanded: product.descriptionExpanded,
                       child: ProductDescription(text: product.description),
                     ),
                   if (product.hasDetails)
@@ -126,7 +129,7 @@ class _Reviews extends StatelessWidget {
     final reviews = product.reviews;
 
     return WDiv(
-      className: 'flex flex-col items-stretch pt-[28.5px] pb-[20px]',
+      className: 'flex flex-col items-stretch pt-[28.5px]',
       children: [
         RatingSummary(product: product),
         if (reviews.isEmpty)

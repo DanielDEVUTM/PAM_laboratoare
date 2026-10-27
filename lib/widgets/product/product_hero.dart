@@ -5,18 +5,20 @@ import '../common/app_image.dart';
 import '../common/favorite_button.dart';
 import '../page_dots.dart';
 
-/// Partea de sus a ecranului: galeria produsului (carusel), inapoi si favorit.
+/// Partea de sus a ecranului: poza produsului (carusel), inapoi si favorit.
 class ProductHero extends StatefulWidget {
   final String productId;
-  final List<String> images;
+  final String image;
 
-  const ProductHero({super.key, required this.productId, required this.images});
+  const ProductHero({super.key, required this.productId, required this.image});
 
   @override
   State<ProductHero> createState() => _ProductHeroState();
 }
 
 class _ProductHeroState extends State<ProductHero> {
+  static const int _pages = 3;
+
   final PageController _controller = PageController();
   int _current = 0;
 
@@ -35,10 +37,9 @@ class _ProductHeroState extends State<ProductHero> {
       children: [
         PageView.builder(
           controller: _controller,
-          itemCount: widget.images.length,
+          itemCount: _pages,
           onPageChanged: (index) => setState(() => _current = index),
-          itemBuilder: (context, index) =>
-              AppImage(widget.images[index], height: 406),
+          itemBuilder: (context, index) => AppImage(widget.image, height: 406),
         ),
         WDiv(
           className: 'absolute top-[${top}px] left-[32px]',
@@ -54,15 +55,10 @@ class _ProductHeroState extends State<ProductHero> {
           className: 'absolute top-[${top}px] right-[33px]',
           child: FavoriteButton(productId: widget.productId),
         ),
-        if (widget.images.length > 1)
-          WDiv(
-            className: 'absolute bottom-[11.75px] left-0 right-0',
-            child: PageDots(
-              count: widget.images.length,
-              current: _current,
-              color: 'dim',
-            ),
-          ),
+        WDiv(
+          className: 'absolute bottom-[11.75px] left-0 right-0',
+          child: PageDots(count: _pages, current: _current, color: 'dim'),
+        ),
       ],
     );
   }

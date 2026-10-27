@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fluttersdk_wind/fluttersdk_wind.dart';
 
-/// Poza din JSON (URL). Cat se incarca apare un fundal gri, iar daca nu se
-/// poate incarca (fara internet) apare o iconita in locul ei.
+/// Poza din assets (`assets/...`) sau de pe internet (URL din JSON).
+/// Cat se incarca apare un fundal gri, iar daca nu se poate incarca
+/// (fara internet) apare o iconita in locul ei.
 class AppImage extends StatelessWidget {
   final String url;
   final double? width;
@@ -27,6 +28,16 @@ class AppImage extends StatelessWidget {
       child: const SizedBox.expand(),
     );
 
+    final error = ColoredBox(
+      color: background,
+      child: Center(
+        child: Icon(
+          Icons.image_not_supported_outlined,
+          color: context.wColorExt('smoke'),
+        ),
+      ),
+    );
+
     return ClipRRect(
       borderRadius: borderRadius,
       child: SizedBox(
@@ -34,21 +45,20 @@ class AppImage extends StatelessWidget {
         height: height,
         child: url.isEmpty
             ? placeholder
+            : url.startsWith('assets/')
+            ? Image.asset(
+                url,
+                fit: BoxFit.cover,
+                alignment: alignment,
+                errorBuilder: (context, e, stackTrace) => error,
+              )
             : Image.network(
                 url,
                 fit: BoxFit.cover,
                 alignment: alignment,
                 loadingBuilder: (context, child, progress) =>
                     progress == null ? child : placeholder,
-                errorBuilder: (context, error, stackTrace) => ColoredBox(
-                  color: background,
-                  child: Center(
-                    child: Icon(
-                      Icons.image_not_supported_outlined,
-                      color: context.wColorExt('smoke'),
-                    ),
-                  ),
-                ),
+                errorBuilder: (context, e, stackTrace) => error,
               ),
       ),
     );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttersdk_wind/fluttersdk_wind.dart';
 
+import '../../data/design_images.dart';
 import '../../models/product.dart';
 import '../common/app_image.dart';
 import '../common/favorite_button.dart';
@@ -29,7 +30,7 @@ class ProductGridCard extends StatelessWidget {
               fit: StackFit.expand,
               children: [
                 AppImage(
-                  product.imageUrl,
+                  DesignImages.of(product.id, product.imageUrl),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 Positioned(
