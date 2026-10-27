@@ -1,15 +1,17 @@
 import 'package:equatable/equatable.dart';
 
 class Review extends Equatable {
+  final String id;
   final String author;
-  final String avatar;
+  final String avatarUrl;
   final String time;
-  final int rating;
+  final double rating;
   final String text;
 
   const Review({
+    required this.id,
     required this.author,
-    required this.avatar,
+    required this.avatarUrl,
     required this.time,
     required this.rating,
     required this.text,
@@ -17,14 +19,15 @@ class Review extends Equatable {
 
   factory Review.fromJson(Map<String, dynamic> json) {
     return Review(
+      id: json['id'] as String? ?? '',
       author: json['author'] as String? ?? '',
-      avatar: json['avatar'] as String? ?? '',
-      time: json['time'] as String? ?? '',
-      rating: (json['rating'] as num?)?.toInt() ?? 0,
+      avatarUrl: json['avatarUrl'] as String? ?? '',
+      time: json['createdAtLabel'] as String? ?? '',
+      rating: (json['rating'] as num?)?.toDouble() ?? 0,
       text: json['text'] as String? ?? '',
     );
   }
 
   @override
-  List<Object?> get props => [author, avatar, time, rating, text];
+  List<Object?> get props => [id, author, avatarUrl, time, rating, text];
 }

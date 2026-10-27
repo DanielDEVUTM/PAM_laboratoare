@@ -6,7 +6,7 @@ import 'catalog.dart';
 
 /// Sursa de date a aplicatiei: citeste asincron fisierul JSON din assets.
 class ProductRepository {
-  static const String defaultPath = 'assets/data/products.json';
+  static const String defaultPath = 'assets/data/lab_v1.json';
 
   final AssetBundle bundle;
   final String path;

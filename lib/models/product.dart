@@ -1,84 +1,198 @@
+import 'dart:ui';
+
 import 'package:equatable/equatable.dart';
 
 import 'review.dart';
 
+/// Sectiunea din JSON in care apare produsul (folosita la filtrare).
+enum ProductSection {
+  featured('Feature Products'),
+  recommended('Recommended'),
+  similar('Similar');
+
+  final String label;
+  const ProductSection(this.label);
+}
+
+class ProductColor extends Equatable {
+  final String id;
+  final String name;
+  final Color color;
+
+  const ProductColor({
+    required this.id,
+    required this.name,
+    required this.color,
+  });
+
+  factory ProductColor.fromJson(Map<String, dynamic> json) {
+    final hex = (json['value'] as String? ?? '#000000').replaceFirst('#', '');
+    return ProductColor(
+      id: json['id'] as String? ?? '',
+      name: json['name'] as String? ?? '',
+      color: Color(int.parse(hex.padLeft(6, '0'), radix: 16) | 0xFF000000),
+    );
+  }
+
+  @override
+  List<Object?> get props => [id, name, color];
+}
+
+/// Procentul de recenzii cu un anumit numar de stele.
+class RatingShare extends Equatable {
+  final int stars;
+  final int percentage;
+
+  const RatingShare({required this.stars, required this.percentage});
+
+  factory RatingShare.fromJson(Map<String, dynamic> json) {
+    return RatingShare(
+      stars: (json['stars'] as num?)?.toInt() ?? 0,
+      percentage: (json['percentage'] as num?)?.toInt() ?? 0,
+    );
+  }
+
+  @override
+  List<Object?> get props => [stars, percentage];
+}
+
+/// Produs din JSON. In listele de pe Home un produs are doar id, nume, pret
+/// si poza; produsul din `productPage` are si detaliile (galerie, rating,
+/// culori, marimi, recenzii, produse similare).
 class Product extends Equatable {
   final String id;
   final String name;
-  final String category;
   final double price;
-  final String image;
-  final double rating;
-  final int ratingsCount;
+  final String currency;
+  final String imageUrl;
+  final List<String> galleryImageUrls;
+  final double? rating;
+  final int ratingCount;
+  final int reviewCount;
   final String description;
-
-  /// Nume de culori din tema Wind, de ex. 'beige', 'onyx'.
-  final List<String> colors;
+  final bool descriptionExpanded;
+  final List<ProductColor> colors;
+  final String? selectedColor;
   final List<String> sizes;
-  final bool isFeatured;
-  final bool isRecommended;
-  final DateTime createdAt;
+  final String? selectedSize;
+  final Map<String, bool> sizeAvailability;
+  final List<RatingShare> ratingBreakdown;
   final List<Review> reviews;
+  final List<Product> similarProducts;
+  final bool isFavorite;
+  final bool canAddToCart;
+  final String addToCartLabel;
+  final Set<ProductSection> sections;
 
   const Product({
     required this.id,
     required this.name,
-    required this.category,
     required this.price,
-    required this.image,
-    this.rating = 0,
-    this.ratingsCount = 0,
+    this.currency = 'USD',
+    required this.imageUrl,
+    this.galleryImageUrls = const [],
+    this.rating,
+    this.ratingCount = 0,
+    this.reviewCount = 0,
     this.description = '',
+    this.descriptionExpanded = false,
     this.colors = const [],
+    this.selectedColor,
     this.sizes = const [],
-    this.isFeatured = false,
-    this.isRecommended = false,
-    required this.createdAt,
+    this.selectedSize,
+    this.sizeAvailability = const {},
+    this.ratingBreakdown = const [],
     this.reviews = const [],
+    this.similarProducts = const [],
+    this.isFavorite = false,
+    this.canAddToCart = true,
+    this.addToCartLabel = 'Add To Cart',
+    this.sections = const {},
   });
 
   factory Product.fromJson(Map<String, dynamic> json) {
+    final actions = json['actions'] as Map<String, dynamic>? ?? const {};
+    List<T> list<T>(String key, T Function(Map<String, dynamic>) parse) =>
+        (json[key] as List? ?? const [])
+            .map((e) => parse(e as Map<String, dynamic>))
+            .toList();
+
     return Product(
       id: json['id'] as String,
       name: json['name'] as String,
-      category: json['category'] as String? ?? '',
       price: (json['price'] as num).toDouble(),
-      image: json['image'] as String? ?? '',
-      rating: (json['rating'] as num?)?.toDouble() ?? 0,
-      ratingsCount: (json['ratings_count'] as num?)?.toInt() ?? 0,
+      currency: json['currency'] as String? ?? 'USD',
+      imageUrl: (json['imageUrl'] ?? json['mainImageUrl']) as String? ?? '',
+      galleryImageUrls: List<String>.from(
+        json['galleryImageUrls'] as List? ?? const [],
+      ),
+      rating: (json['rating'] as num?)?.toDouble(),
+      ratingCount: (json['ratingCount'] as num?)?.toInt() ?? 0,
+      reviewCount: (json['reviewCount'] as num?)?.toInt() ?? 0,
       description: json['description'] as String? ?? '',
-      colors: List<String>.from(json['colors'] as List? ?? const []),
-      sizes: List<String>.from(json['sizes'] as List? ?? const []),
-      isFeatured: json['is_featured'] as bool? ?? false,
-      isRecommended: json['is_recommended'] as bool? ?? false,
-      createdAt:
-          DateTime.tryParse(json['created_at'] as String? ?? '') ??
-          DateTime.fromMillisecondsSinceEpoch(0),
-      reviews: (json['reviews'] as List? ?? const [])
-          .map((e) => Review.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      descriptionExpanded: json['descriptionExpanded'] as bool? ?? false,
+      colors: list('availableColors', ProductColor.fromJson),
+      selectedColor: json['selectedColor'] as String?,
+      sizes: List<String>.from(json['availableSizes'] as List? ?? const []),
+      selectedSize: json['selectedSize'] as String?,
+      sizeAvailability: Map<String, bool>.from(
+        json['sizeAvailability'] as Map? ?? const {},
+      ),
+      ratingBreakdown: list('ratingBreakdown', RatingShare.fromJson),
+      reviews: list('reviews', Review.fromJson),
+      similarProducts: list('similarProducts', Product.fromJson),
+      isFavorite: actions['isFavorite'] as bool? ?? false,
+      canAddToCart: actions['canAddToCart'] as bool? ?? true,
+      addToCartLabel: actions['addToCartLabel'] as String? ?? 'Add To Cart',
     );
   }
 
-  String get formattedPrice => '\$ ${price.toStringAsFixed(2)}';
+  /// Produsul are pagina de detalii completa (rating, culori, recenzii...).
+  bool get hasDetails => rating != null || description.isNotEmpty;
 
-  int get reviewsCount => reviews.length;
+  /// Pozele pentru caruselul din pagina de detalii.
+  List<String> get images =>
+      galleryImageUrls.isNotEmpty ? galleryImageUrls : [imageUrl];
 
-  /// Procentul de recenzii pentru fiecare numar de stele (5..1).
-  List<(int, int)> get ratingBreakdown {
-    final total = reviews.length;
-    return [
-      for (int stars = 5; stars >= 1; stars--)
-        (
-          stars,
-          total == 0
-              ? 0
-              : (reviews.where((r) => r.rating == stars).length * 100 / total)
-                    .round(),
-        ),
-    ];
+  bool isSizeAvailable(String size) => sizeAvailability[size] ?? true;
+
+  String get formattedPrice {
+    final symbol = switch (currency) {
+      'USD' => '\$ ',
+      'EUR' => '€ ',
+      _ => '$currency ',
+    };
+    return '$symbol${price.toStringAsFixed(2)}';
+  }
+
+  Product copyWith({Set<ProductSection>? sections}) {
+    return Product(
+      id: id,
+      name: name,
+      price: price,
+      currency: currency,
+      imageUrl: imageUrl,
+      galleryImageUrls: galleryImageUrls,
+      rating: rating,
+      ratingCount: ratingCount,
+      reviewCount: reviewCount,
+      description: description,
+      descriptionExpanded: descriptionExpanded,
+      colors: colors,
+      selectedColor: selectedColor,
+      sizes: sizes,
+      selectedSize: selectedSize,
+      sizeAvailability: sizeAvailability,
+      ratingBreakdown: ratingBreakdown,
+      reviews: reviews,
+      similarProducts: similarProducts,
+      isFavorite: isFavorite,
+      canAddToCart: canAddToCart,
+      addToCartLabel: addToCartLabel,
+      sections: sections ?? this.sections,
+    );
   }
 
   @override
-  List<Object?> get props => [id];
+  List<Object?> get props => [id, name, price, sections, hasDetails];
 }
