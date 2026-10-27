@@ -23,11 +23,12 @@ class RatingSummary extends StatelessWidget {
               children: [
                 WText(
                   (product.rating ?? 0).toStringAsFixed(1),
-                  className: 'font-mont text-[34px] font-medium leading-[34px] text-night',
+                  className: 'font-mont text-[34px] font-semibold leading-[34px] text-night',
                 ),
                 const WText(
                   'OUT OF 5',
-                  className: 'ml-[7.5px] mb-[7px] font-body font-light text-[10.5px] text-ash',
+                  className:
+                      'ml-[7.5px] mb-[7px] font-body text-[10.5px] text-ash',
                 ),
               ],
             ),
@@ -69,7 +70,7 @@ class RatingSummary extends StatelessWidget {
                 children: [
                   WText(
                     'WRITE A REVIEW',
-                    className: 'font-body font-light text-[9px] text-silver',
+                    className: 'font-body text-[9px] text-silver',
                   ),
                   WDiv(
                     className: 'ml-[6px]',
@@ -110,7 +111,10 @@ class _RatingBar extends StatelessWidget {
             className: 'relative h-[4px] rounded-full bg-track',
             children: [
               FractionallySizedBox(
-                widthFactor: percent / 100,
+                // ca in macheta, o bara care nu e 0% are mereu o lungime minima vizibila
+                widthFactor: percent == 0
+                    ? 0
+                    : (0.04 + percent / 100).clamp(0.0, 1.0),
                 child: const WDiv(className: 'h-[4px] rounded-full bg-sage'),
               ),
             ],
@@ -119,10 +123,7 @@ class _RatingBar extends StatelessWidget {
         WDiv(
           className: 'w-[24px] flex flex-row justify-end',
           children: [
-            WText(
-              '$percent%',
-              className: 'font-body font-light text-[10.5px] text-coal',
-            ),
+            WText('$percent%', className: 'font-body text-[10.5px] text-coal'),
           ],
         ),
       ],

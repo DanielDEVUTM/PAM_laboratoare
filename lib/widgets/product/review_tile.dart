@@ -33,7 +33,8 @@ class ReviewTile extends StatelessWidget {
               children: [
                 WText(
                   review.author,
-                  className: 'font-mont text-[13px] font-medium text-charcoal',
+                  className:
+                      'font-mont text-[13px] font-semibold text-charcoal',
                 ),
                 WDiv(
                   className: 'mt-[6px]',
@@ -45,15 +46,12 @@ class ReviewTile extends StatelessWidget {
                 ),
               ],
             ),
-            WText(
-              review.time,
-              className: 'font-body font-light text-[9.5px] text-fog',
-            ),
+            WText(review.time, className: 'font-body text-[9.5px] text-fog'),
           ],
         ),
         WText(
           review.text,
-          className: 'mt-[19px] pl-[1.5px] font-body font-light text-[10.1px] leading-[17px] text-jet',
+          className: 'mt-[19px] pl-[1.5px] font-body text-[10.1px] leading-[17px] text-jet',
         ),
       ],
     );

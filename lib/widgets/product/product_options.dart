@@ -33,7 +33,7 @@ class _ProductOptionsState extends State<ProductOptions> {
             children: [
               const WText(
                 'Color',
-                className: 'font-body text-[13.5px] text-dusk',
+                className: 'font-mont text-[13.5px] font-medium text-dusk',
               ),
               WDiv(
                 className: 'flex flex-row items-center gap-[10px] mt-[11.5px] ml-[1px]',
@@ -56,7 +56,7 @@ class _ProductOptionsState extends State<ProductOptions> {
             children: [
               const WText(
                 'Size',
-                className: 'font-body text-[13.5px] text-dusk',
+                className: 'font-mont text-[13.5px] font-medium text-dusk',
               ),
               WDiv(
                 className: 'flex flex-row items-center gap-[7.5px] mt-[11.5px]',

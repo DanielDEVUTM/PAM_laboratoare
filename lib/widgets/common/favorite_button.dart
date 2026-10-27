@@ -25,7 +25,7 @@ class FavoriteButton extends StatelessWidget {
         children: [
           WIcon(
             favorite ? Icons.favorite : Icons.favorite_border,
-            className: 'text-[${(size * 0.56).round()}px] text-salmon',
+            className: 'text-[${(size * 0.62).round()}px] text-salmon',
           ),
         ],
       ),

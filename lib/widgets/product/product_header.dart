@@ -20,7 +20,7 @@ class ProductHeader extends StatelessWidget {
           children: [
             WText(
               product.name,
-              className: 'font-mont text-[17.5px] font-medium text-ink',
+              className: 'font-mont text-[17.5px] font-semibold text-ink',
             ),
             if (product.rating != null)
               WDiv(

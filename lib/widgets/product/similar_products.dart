@@ -21,8 +21,8 @@ class SimilarProducts extends StatelessWidget {
           for (final product in products)
             ProductCard(
               product: product,
-              nameClassName: 'font-mont text-[11.5px] text-ink',
-              priceClassName: 'font-mont text-[14.5px] font-medium text-ink',
+              nameClassName: 'font-mont text-[11.5px] font-medium text-ink',
+              priceClassName: 'font-mont text-[14.5px] font-semibold text-ink',
               nameMargin: 'mt-[10.5px]',
               onTap: () => Navigator.pushReplacementNamed(
                 context,

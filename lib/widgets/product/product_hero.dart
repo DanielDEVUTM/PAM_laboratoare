@@ -47,7 +47,7 @@ class _ProductHeroState extends State<ProductHero> {
             onTap: () => Navigator.maybePop(context),
             child: const WIcon(
               Icons.arrow_back_ios_new,
-              className: 'text-[14px] text-navy',
+              className: 'text-[16px] text-navy',
             ),
           ),
         ),

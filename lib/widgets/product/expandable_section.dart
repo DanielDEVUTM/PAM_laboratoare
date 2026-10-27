@@ -40,7 +40,7 @@ class _ExpandableSectionState extends State<ExpandableSection> {
             children: [
               WText(
                 widget.title,
-                className: 'mt-[5px] font-mont text-[15.5px] font-medium text-charcoal',
+                className: 'mt-[5px] font-mont text-[15.5px] font-semibold text-charcoal',
               ),
               Transform.translate(
                 offset: const Offset(3.5, 5.5),

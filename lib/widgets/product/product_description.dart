@@ -16,12 +16,12 @@ class ProductDescription extends StatelessWidget {
       child: Text.rich(
         TextSpan(
           text: '$text   ',
-          style: style('font-body font-light text-[11.6px] leading-[20px] text-ink'),
+          style: style('font-body text-[11.6px] leading-[20px] text-ink'),
           children: [
             TextSpan(
               text: 'Read more',
               style: style(
-                'font-body font-light text-[11.6px] leading-[20px] text-sage underline decoration-sage',
+                'font-body text-[11.6px] leading-[20px] text-sage underline decoration-sage',
               ),
             ),
           ],
