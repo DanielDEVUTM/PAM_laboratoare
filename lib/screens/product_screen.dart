@@ -47,21 +47,26 @@ class ProductScreen extends StatelessWidget {
       );
     }
 
-    final similar = state.similarTo(product);
+    final similar = product.similarProducts;
 
     return Scaffold(
       backgroundColor: context.wColorExt('cream'),
       bottomNavigationBar: AddToCartBar(
-        onTap: () => ScaffoldMessenger.of(context)
-          ..hideCurrentSnackBar()
-          ..showSnackBar(
-            SnackBar(content: Text('${product.name} a fost adaugat in cos')),
-          ),
+        label: product.addToCartLabel,
+        onTap: product.canAddToCart
+            ? () => ScaffoldMessenger.of(context)
+                ..hideCurrentSnackBar()
+                ..showSnackBar(
+                  SnackBar(
+                    content: Text('${product.name} a fost adaugat in cos'),
+                  ),
+                )
+            : null,
       ),
       body: WDiv(
         className: 'flex flex-col items-stretch overflow-y-auto',
         children: [
-          ProductHero(productId: product.id, image: product.image),
+          ProductHero(productId: product.id, images: product.images),
           WDiv(
             className: 'flex flex-col items-stretch pt-[50.5px] pb-[38px] bg-white rounded-t-2xl shadow-sheet',
             children: [
@@ -76,20 +81,22 @@ class ProductScreen extends StatelessWidget {
                       className: 'mt-[16px]',
                       child: ProductOptions(
                         key: ValueKey(product.id),
-                        colors: product.colors,
-                        sizes: product.sizes,
+                        product: product,
                       ),
                     ),
                     const WDiv(className: 'h-[1px] mt-[32px] bg-divider'),
                   ],
-                  ExpandableSection(
-                    title: 'Description',
-                    child: ProductDescription(text: product.description),
-                  ),
-                  ExpandableSection(
-                    title: 'Reviews',
-                    child: _Reviews(product: product),
-                  ),
+                  if (product.description.isNotEmpty)
+                    ExpandableSection(
+                      title: 'Description',
+                      initiallyExpanded: product.descriptionExpanded,
+                      child: ProductDescription(text: product.description),
+                    ),
+                  if (product.hasDetails)
+                    ExpandableSection(
+                      title: 'Reviews',
+                      child: _Reviews(product: product),
+                    ),
                 ],
               ),
               if (similar.isNotEmpty)

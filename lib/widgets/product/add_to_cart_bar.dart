@@ -3,9 +3,12 @@ import 'package:fluttersdk_wind/fluttersdk_wind.dart';
 
 /// Bara fixa de jos cu butonul "Add To Cart".
 class AddToCartBar extends StatelessWidget {
-  final VoidCallback onTap;
+  final String label;
 
-  const AddToCartBar({super.key, required this.onTap});
+  /// null cand produsul nu poate fi adaugat in cos (butonul devine gri).
+  final VoidCallback? onTap;
+
+  const AddToCartBar({super.key, required this.label, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -13,14 +16,18 @@ class AddToCartBar extends StatelessWidget {
       className: 'bg-white',
       child: WAnchor(
         onTap: onTap,
-        child: const WDiv(
+        child: WDiv(
           className:
-              'flex flex-row items-start justify-center h-[77px] pt-[25px] bg-carbon rounded-t-3xl',
+              'flex flex-row items-start justify-center h-[77px] pt-[25px] ${onTap == null ? 'bg-pebble' : 'bg-carbon'} rounded-t-3xl',
           children: [
-            WIcon(Icons.shopping_bag, className: 'text-[24px] text-white'),
+            const WIcon(
+              Icons.shopping_bag,
+              className: 'text-[24px] text-white',
+            ),
             WText(
-              'Add To Cart',
-              className: 'ml-[16px] mt-[4.5px] text-[16.5px] font-medium text-white',
+              label,
+              className:
+                  'ml-[16px] mt-[4.5px] text-[16.5px] font-medium text-white',
             ),
           ],
         ),

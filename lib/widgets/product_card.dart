@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttersdk_wind/fluttersdk_wind.dart';
 
 import '../models/product.dart';
+import 'common/app_image.dart';
 
 /// Card vertical de produs: poza 126x172 + nume + pret.
 /// Folosit in "Feature Products" (Home) si "Similar Product" (Product).
@@ -30,9 +31,11 @@ class ProductCard extends StatelessWidget {
       child: WDiv(
         className: 'flex flex-col items-start w-[126px]',
         children: [
-          WImage(
-            src: 'asset://${product.image}',
-            className: 'w-[126px] h-[172px] rounded-lg object-cover',
+          AppImage(
+            product.imageUrl,
+            width: 126,
+            height: 172,
+            borderRadius: BorderRadius.circular(8),
           ),
           WText(product.name, className: '$nameMargin truncate $nameClassName'),
           WText(

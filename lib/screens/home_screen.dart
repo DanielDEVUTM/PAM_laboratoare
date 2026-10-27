@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttersdk_wind/fluttersdk_wind.dart';
 
 import '../cubits/products/products_cubit.dart';
+import '../models/product.dart';
 import '../routes.dart';
 import '../widgets/common/state_views.dart';
 import '../widgets/home/banner_carousel.dart';
@@ -25,7 +26,11 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const HomeHeader(),
+            HomeHeader(
+              storeName: context.select<ProductsCubit, String>(
+                (cubit) => cubit.state.catalog.storeName,
+              ),
+            ),
             Expanded(
               child: BlocBuilder<ProductsCubit, ProductsState>(
                 builder: (context, state) {
@@ -41,7 +46,7 @@ class HomeScreen extends StatelessWidget {
                   if (state.allProducts.isEmpty) {
                     return const EmptyView(
                       title: 'No products yet',
-                      message: 'The catalog is empty.',
+                      message: 'The JSON file has no products.',
                       icon: Icons.inventory_2_outlined,
                     );
                   }
@@ -61,13 +66,9 @@ class _HomeContent extends StatelessWidget {
 
   const _HomeContent({required this.state});
 
-  void _openCategory(BuildContext context, String categoryId) {
-    context.read<ProductsCubit>().selectCategory(categoryId);
-    Navigator.pushNamed(context, Routes.catalog);
-  }
-
   @override
   Widget build(BuildContext context) {
+    final catalog = state.catalog;
     void showAll() => Navigator.pushNamed(context, Routes.catalog);
 
     return WDiv(
@@ -76,27 +77,42 @@ class _HomeContent extends StatelessWidget {
         WDiv(
           className: 'mt-[17px]',
           child: CategorySelector(
-            categories: state.categories,
+            categories: catalog.categories,
             selectedId: state.categoryId,
-            onSelected: (id) => _openCategory(context, id),
+            onSelected: context.read<ProductsCubit>().selectCategory,
           ),
         ),
-        const WDiv(className: 'mt-[28px]', child: BannerCarousel()),
+        if (catalog.heroBanner != null)
+          WDiv(
+            className: 'mt-[28px]',
+            child: BannerCarousel(banner: catalog.heroBanner!),
+          ),
         WDiv(
           className: 'mt-[34px]',
-          child: FeatureProducts(products: state.featured, onShowAll: showAll),
+          child: FeatureProducts(
+            products: state.inSection(ProductSection.featured),
+            onShowAll: showAll,
+          ),
         ),
-        const WDiv(className: 'mt-[19.5px]', child: NewCollectionBanner()),
+        if (catalog.newCollection != null)
+          WDiv(
+            className: 'mt-[19.5px]',
+            child: NewCollectionBanner(collection: catalog.newCollection!),
+          ),
         WDiv(
           className: 'mt-[36.5px]',
           child: RecommendedSection(
-            products: state.recommended,
+            products: state.inSection(ProductSection.recommended),
             onShowAll: showAll,
           ),
         ),
         WDiv(
           className: 'mt-[24px] pb-[17.5px]',
-          child: TopCollection(onShowAll: showAll),
+          child: TopCollection(
+            collections: catalog.topCollections,
+            promos: catalog.categoryPromos,
+            onShowAll: showAll,
+          ),
         ),
       ],
     );

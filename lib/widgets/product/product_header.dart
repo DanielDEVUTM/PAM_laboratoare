@@ -22,17 +22,18 @@ class ProductHeader extends StatelessWidget {
               product.name,
               className: 'font-mont text-[17.5px] font-medium text-ink',
             ),
-            WDiv(
-              className: 'flex flex-row items-center mt-[15.5px]',
-              children: [
-                StarRating(rating: product.rating.round()),
-                WText(
-                  '(${product.ratingsCount})',
-                  className:
-                      'ml-[5px] mt-[3px] font-body text-[11px] text-soot',
-                ),
-              ],
-            ),
+            if (product.rating != null)
+              WDiv(
+                className: 'flex flex-row items-center mt-[15.5px]',
+                children: [
+                  StarRating(rating: product.rating!.round()),
+                  WText(
+                    '(${product.ratingCount})',
+                    className:
+                        'ml-[5px] mt-[3px] font-body text-[11px] text-soot',
+                  ),
+                ],
+              ),
           ],
         ),
         WText(

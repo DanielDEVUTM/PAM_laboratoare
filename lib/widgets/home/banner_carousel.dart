@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:fluttersdk_wind/fluttersdk_wind.dart';
 
+import '../../models/home_content.dart';
+import '../common/app_image.dart';
 import '../page_dots.dart';
 
 class BannerCarousel extends StatefulWidget {
-  const BannerCarousel({super.key});
+  final HeroBanner banner;
+
+  const BannerCarousel({super.key, required this.banner});
 
   @override
   State<BannerCarousel> createState() => _BannerCarouselState();
 }
 
 class _BannerCarouselState extends State<BannerCarousel> {
-  static const int _pages = 3;
-
-  final PageController _controller = PageController();
-  int _current = 0;
+  late final PageController _controller = PageController(
+    initialPage: widget.banner.activeSlide,
+  );
+  late int _current = widget.banner.activeSlide;
 
   @override
   void dispose() {
@@ -24,6 +28,8 @@ class _BannerCarouselState extends State<BannerCarousel> {
 
   @override
   Widget build(BuildContext context) {
+    final pages = widget.banner.slides < 1 ? 1 : widget.banner.slides;
+
     return WDiv(
       className: 'px-[32px]',
       child: WDiv(
@@ -31,14 +37,15 @@ class _BannerCarouselState extends State<BannerCarousel> {
         children: [
           PageView.builder(
             controller: _controller,
-            itemCount: _pages,
+            itemCount: pages,
             onPageChanged: (index) => setState(() => _current = index),
-            itemBuilder: (context, index) => const _BannerPage(),
+            itemBuilder: (context, index) => _BannerPage(banner: widget.banner),
           ),
-          WDiv(
-            className: 'absolute bottom-[9px] left-0 right-0',
-            child: PageDots(count: _pages, current: _current),
-          ),
+          if (pages > 1)
+            WDiv(
+              className: 'absolute bottom-[9px] left-0 right-0',
+              child: PageDots(count: pages, current: _current),
+            ),
         ],
       ),
     );
@@ -46,21 +53,36 @@ class _BannerCarouselState extends State<BannerCarousel> {
 }
 
 class _BannerPage extends StatelessWidget {
-  const _BannerPage();
+  final HeroBanner banner;
+
+  const _BannerPage({required this.banner});
 
   @override
   Widget build(BuildContext context) {
-    return const WDiv(
+    return WDiv(
       className: 'relative w-full h-[168px]',
       children: [
-        WImage(
-          src: 'asset://assets/images/banner.jpg',
-          className: 'w-full h-[168px] object-cover',
+        AppImage(banner.imageUrl, height: 168),
+        // Umbra din dreapta, ca titlul alb sa se citeasca pe orice poza.
+        const WDiv(
+          className: 'absolute top-0 bottom-0 left-0 right-0',
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                colors: [Color(0x00000000), Color(0x80000000)],
+              ),
+            ),
+            child: SizedBox.expand(),
+          ),
         ),
-        WText(
-          'Autumn\nCollection\n2021',
-          className:
-              'absolute top-[18px] left-[188px] text-[22.5px] font-bold leading-[31px] text-white',
+        WDiv(
+          className: 'absolute top-[18px] left-[150px] right-[20px]',
+          child: WText(
+            banner.title,
+            className: 'text-[22.5px] font-bold leading-[31px] text-white',
+          ),
         ),
       ],
     );

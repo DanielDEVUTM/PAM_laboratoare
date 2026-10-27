@@ -6,6 +6,7 @@ import '../cubits/favorites/favorites_cubit.dart';
 import '../cubits/products/products_cubit.dart';
 import '../models/product.dart';
 import '../routes.dart';
+import '../widgets/common/app_image.dart';
 import '../widgets/common/screen_header.dart';
 import '../widgets/common/state_views.dart';
 
@@ -69,9 +70,13 @@ class _FavoriteTile extends StatelessWidget {
       child: WDiv(
         className: 'flex flex-row items-center h-[96px] bg-white rounded-lg border border-line shadow-card',
         children: [
-          WImage(
-            src: 'asset://${product.image}',
-            className: 'w-[84px] h-[96px] rounded-l-lg object-cover',
+          AppImage(
+            product.imageUrl,
+            width: 84,
+            height: 96,
+            borderRadius: const BorderRadius.horizontal(
+              left: Radius.circular(8),
+            ),
           ),
           WDiv(
             className: 'flex-1 flex flex-col items-start pl-[14px]',

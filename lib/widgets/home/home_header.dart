@@ -5,23 +5,25 @@ import '../../routes.dart';
 import '../common/favorite_button.dart';
 
 class HomeHeader extends StatelessWidget {
-  const HomeHeader({super.key});
+  final String storeName;
+
+  const HomeHeader({super.key, required this.storeName});
 
   @override
   Widget build(BuildContext context) {
-    return const WDiv(
+    return WDiv(
       className:
           'flex flex-row items-center justify-between h-[64px] px-[31px]',
       children: [
-        _MenuButton(),
+        const _MenuButton(),
         WDiv(
           className: 'pl-[4px]',
           child: WText(
-            'GemStore',
+            storeName,
             className: 'text-[19px] font-bold text-black',
           ),
         ),
-        _Actions(),
+        const _Actions(),
       ],
     );
   }

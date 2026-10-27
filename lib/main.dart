@@ -31,16 +31,23 @@ class GemStoreApp extends StatelessWidget {
           BlocProvider(create: (_) => ProductsCubit(repository)..load()),
           BlocProvider(create: (_) => FavoritesCubit()),
         ],
-        child: AnnotatedRegion<SystemUiOverlayStyle>(
-          value: SystemUiOverlayStyle.dark,
-          child: WindTheme(
-            data: appWindTheme,
-            builder: (context, controller) => MaterialApp(
-              title: 'GemStore',
-              debugShowCheckedModeBanner: false,
-              theme: controller.toThemeData(),
-              initialRoute: Routes.home,
-              onGenerateRoute: _onGenerateRoute,
+        // Dupa incarcare, produsele marcate "isFavorite" in JSON devin favorite.
+        child: BlocListener<ProductsCubit, ProductsState>(
+          listenWhen: (previous, current) =>
+              previous.catalog != current.catalog,
+          listener: (context, state) =>
+              context.read<FavoritesCubit>().addAll(state.initialFavorites),
+          child: AnnotatedRegion<SystemUiOverlayStyle>(
+            value: SystemUiOverlayStyle.dark,
+            child: WindTheme(
+              data: appWindTheme,
+              builder: (context, controller) => MaterialApp(
+                title: 'GemStore',
+                debugShowCheckedModeBanner: false,
+                theme: controller.toThemeData(),
+                initialRoute: Routes.home,
+                onGenerateRoute: _onGenerateRoute,
+              ),
             ),
           ),
         ),

@@ -3,8 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttersdk_wind/fluttersdk_wind.dart';
 
 import '../cubits/products/products_cubit.dart';
+import '../models/product.dart';
 import '../routes.dart';
-import '../widgets/catalog/category_chips.dart';
+import '../widgets/catalog/filter_chips.dart';
 import '../widgets/catalog/product_grid_card.dart';
 import '../widgets/catalog/search_field.dart';
 import '../widgets/catalog/sort_menu.dart';
@@ -12,7 +13,7 @@ import '../widgets/common/favorite_button.dart';
 import '../widgets/common/screen_header.dart';
 import '../widgets/common/state_views.dart';
 
-/// Lista tuturor produselor, cu cautare, filtrare pe categorii si sortare.
+/// Lista tuturor produselor, cu cautare, filtrare pe sectiuni si sortare.
 class CatalogScreen extends StatelessWidget {
   const CatalogScreen({super.key});
 
@@ -44,10 +45,13 @@ class CatalogScreen extends StatelessWidget {
                 ),
                 WDiv(
                   className: 'mt-[16px]',
-                  child: CategoryChips(
-                    categories: state.categories,
-                    selectedId: state.categoryId,
-                    onSelected: cubit.selectCategory,
+                  child: FilterChips<ProductSection>(
+                    options: [
+                      for (final section in ProductSection.values)
+                        (section, section.label),
+                    ],
+                    selected: state.section,
+                    onSelected: cubit.filterBySection,
                   ),
                 ),
                 WDiv(
@@ -97,7 +101,7 @@ class _Body extends StatelessWidget {
               )
             : const EmptyView(
                 title: 'No products yet',
-                message: 'The catalog is empty.',
+                message: 'The JSON file has no products.',
                 icon: Icons.inventory_2_outlined,
               );
       case ProductsStatus.success:

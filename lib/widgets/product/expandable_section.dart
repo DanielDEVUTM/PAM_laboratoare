@@ -15,14 +15,17 @@ class ExpandableSection extends StatefulWidget {
     required this.title,
     required this.child,
     this.headerClassName = '',
+    this.initiallyExpanded = true,
   });
+
+  final bool initiallyExpanded;
 
   @override
   State<ExpandableSection> createState() => _ExpandableSectionState();
 }
 
 class _ExpandableSectionState extends State<ExpandableSection> {
-  bool _expanded = true;
+  late bool _expanded = widget.initiallyExpanded;
 
   @override
   Widget build(BuildContext context) {

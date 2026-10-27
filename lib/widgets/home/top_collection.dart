@@ -1,13 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:fluttersdk_wind/fluttersdk_wind.dart';
 
+import '../../models/home_content.dart';
+import '../common/app_image.dart';
 import 'collection_label.dart';
 import 'section_header.dart';
 
 class TopCollection extends StatelessWidget {
+  final List<Collection> collections;
+  final List<CategoryPromo> promos;
   final VoidCallback? onShowAll;
 
-  const TopCollection({super.key, this.onShowAll});
+  const TopCollection({
+    super.key,
+    required this.collections,
+    required this.promos,
+    this.onShowAll,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -15,71 +24,56 @@ class TopCollection extends StatelessWidget {
       className: 'flex flex-col items-stretch',
       children: [
         SectionHeader(title: 'Top Collection', onShowAll: onShowAll),
-        const WDiv(
+        WDiv(
           className: 'flex flex-col items-stretch mt-[29.5px] px-[32px]',
           children: [
-            _CollectionCard(
-              image: 'assets/images/collection_1.jpg',
-              height: 141,
-              textClassName: 'top-[20px] left-[23px]',
-              children: [
-                CollectionLabel('Sale up to 40%'),
-                WText(
-                  'FOR SLIM\n& BEAUTY',
-                  className: 'mt-[23px] text-[19px] font-light leading-[24px] text-dusk',
+            for (int i = 0; i < collections.length; i++)
+              WDiv(
+                className: i == 0 ? '' : 'mt-[15px]',
+                child: _CollectionCard(
+                  image: collections[i].imageUrl,
+                  // primul card e mai mic si cu titlu subtire, al doilea
+                  // e mai inalt si cu titlu ingrosat (ca in macheta)
+                  height: i.isEven ? 141 : 210,
+                  textClassName: i.isEven
+                      ? 'top-[20px] left-[23px] w-[150px]'
+                      : 'top-[32.5px] left-[23px] w-[150px]',
+                  children: [
+                    CollectionLabel(collections[i].label),
+                    WText(
+                      collections[i].title,
+                      className: i.isEven
+                          ? 'mt-[23px] text-[19px] font-light leading-[24px] text-dusk'
+                          : 'mt-[23px] text-[18px] font-bold leading-[30px] text-graphite',
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            WDiv(
-              className: 'mt-[15px]',
-              child: _CollectionCard(
-                image: 'assets/images/collection_2.jpg',
-                height: 210,
-                textClassName: 'top-[32.5px] left-[23px]',
+              ),
+            if (promos.isNotEmpty)
+              WDiv(
+                className: 'flex flex-row gap-[10px] mt-[16px]',
                 children: [
-                  CollectionLabel('Summer Collection 2021'),
-                  WText(
-                    'Most sexy\n& fabulous\ndesign',
-                    className: 'mt-[23px] text-[18px] font-bold leading-[30px] text-graphite',
-                  ),
+                  for (final promo in promos)
+                    WDiv(
+                      className: 'flex-1',
+                      child: _CollectionCard(
+                        image: promo.imageUrl,
+                        height: 194,
+                        textClassName: 'top-[40px] left-[12px] w-[80px]',
+                        children: [
+                          WText(
+                            promo.category,
+                            className: 'text-[12.5px] text-steel',
+                          ),
+                          WText(
+                            promo.title,
+                            className: 'mt-[14px] text-[16px] font-light leading-[21px] text-ink',
+                          ),
+                        ],
+                      ),
+                    ),
                 ],
               ),
-            ),
-            WDiv(
-              className: 'flex flex-row gap-[10px] mt-[16px]',
-              children: [
-                WDiv(
-                  className: 'flex-148',
-                  child: _CollectionCard(
-                    image: 'assets/images/collection_3.jpg',
-                    height: 194,
-                    textClassName: 'top-[42px] left-[83px]',
-                    children: [
-                      WText('T-Shirts', className: 'text-[12.5px] text-steel'),
-                      WText(
-                        'The\nOffice\nLife',
-                        className: 'mt-[14px] text-[16px] font-light leading-[21px] text-ink',
-                      ),
-                    ],
-                  ),
-                ),
-                WDiv(
-                  className: 'flex-154',
-                  child: _CollectionCard(
-                    image: 'assets/images/collection_4.jpg',
-                    height: 194,
-                    textClassName: 'top-[39.5px] left-[8px]',
-                    children: [
-                      WText('Dresses', className: 'text-[12.5px] text-steel'),
-                      WText(
-                        'Elegant\nDesign',
-                        className: 'mt-[18px] text-[16.5px] font-light leading-[22px] text-ink',
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
           ],
         ),
       ],
@@ -87,7 +81,7 @@ class TopCollection extends StatelessWidget {
   }
 }
 
-/// Card cu fundal gri deschis, poza in dreapta/stanga si text suprapus.
+/// Card cu poza de fundal si text suprapus in stanga.
 class _CollectionCard extends StatelessWidget {
   final String image;
   final double height;
@@ -108,7 +102,21 @@ class _CollectionCard extends StatelessWidget {
     return WDiv(
       className: 'relative w-full $h rounded-xl overflow-hidden bg-snow',
       children: [
-        WImage(src: 'asset://$image', className: 'w-full $h object-cover'),
+        AppImage(image, height: height, alignment: Alignment.centerRight),
+        const WDiv(
+          className: 'absolute top-0 bottom-0 left-0 right-0',
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                colors: [Color(0xE6F8F8FA), Color(0x00F8F8FA)],
+                stops: [0.35, 0.75],
+              ),
+            ),
+            child: SizedBox.expand(),
+          ),
+        ),
         WDiv(
           className: 'absolute $textClassName flex flex-col items-start',
           children: children,

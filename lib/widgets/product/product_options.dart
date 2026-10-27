@@ -1,33 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:fluttersdk_wind/fluttersdk_wind.dart';
 
-/// Alegerea culorii si a marimii.
-class ProductOptions extends StatefulWidget {
-  /// Nume de culori din tema Wind.
-  final List<String> colors;
-  final List<String> sizes;
+import '../../models/product.dart';
 
-  const ProductOptions({super.key, required this.colors, required this.sizes});
+/// Alegerea culorii si a marimii. Selectia initiala si marimile disponibile
+/// vin din JSON (selectedColor, selectedSize, sizeAvailability).
+class ProductOptions extends StatefulWidget {
+  final Product product;
+
+  const ProductOptions({super.key, required this.product});
 
   @override
   State<ProductOptions> createState() => _ProductOptionsState();
 }
 
 class _ProductOptionsState extends State<ProductOptions> {
-  int _color = 0;
-  late int _size = widget.sizes.length > 2 ? 2 : 0;
+  late String? _color =
+      widget.product.selectedColor ??
+      (widget.product.colors.isEmpty ? null : widget.product.colors.first.id);
+  late String? _size = widget.product.selectedSize;
 
   @override
   Widget build(BuildContext context) {
-    // Cu mai mult de 3 marimi, coloana Color se ingusteaza ca sa incapa.
-    final colorWidth = widget.sizes.length > 3 ? 'w-[150px]' : 'w-[197px]';
+    final product = widget.product;
 
     return WDiv(
       className: 'flex flex-row items-start',
       children: [
-        if (widget.colors.isNotEmpty)
+        if (product.colors.isNotEmpty)
           WDiv(
-            className: '$colorWidth flex flex-col items-start',
+            className: 'w-[197px] flex flex-col items-start',
             children: [
               const WText(
                 'Color',
@@ -36,19 +38,19 @@ class _ProductOptionsState extends State<ProductOptions> {
               WDiv(
                 className: 'flex flex-row items-center gap-[10px] mt-[11.5px] ml-[1px]',
                 children: [
-                  for (int i = 0; i < widget.colors.length; i++)
+                  for (final color in product.colors)
                     WAnchor(
-                      onTap: () => setState(() => _color = i),
+                      onTap: () => setState(() => _color = color.id),
                       child: _Swatch(
-                        color: widget.colors[i],
-                        selected: i == _color,
+                        color: color.color,
+                        selected: color.id == _color,
                       ),
                     ),
                 ],
               ),
             ],
           ),
-        if (widget.sizes.isNotEmpty)
+        if (product.sizes.isNotEmpty)
           WDiv(
             className: 'flex-1 flex flex-col items-start',
             children: [
@@ -59,13 +61,13 @@ class _ProductOptionsState extends State<ProductOptions> {
               WDiv(
                 className: 'flex flex-row items-center gap-[7.5px] mt-[11.5px]',
                 children: [
-                  for (int i = 0; i < widget.sizes.length; i++)
+                  for (final size in product.sizes)
                     WAnchor(
-                      onTap: () => setState(() => _size = i),
-                      child: _SizeChip(
-                        label: widget.sizes[i],
-                        selected: i == _size,
-                      ),
+                      // marimile indisponibile nu se pot alege
+                      onTap: product.isSizeAvailable(size)
+                          ? () => setState(() => _size = size)
+                          : null,
+                      child: _SizeChip(label: size, selected: size == _size),
                     ),
                 ],
               ),
@@ -77,14 +79,18 @@ class _ProductOptionsState extends State<ProductOptions> {
 }
 
 class _Swatch extends StatelessWidget {
-  final String color;
+  final Color color;
   final bool selected;
 
   const _Swatch({required this.color, required this.selected});
 
   @override
   Widget build(BuildContext context) {
-    final circle = WDiv(className: 'size-[24px] rounded-full bg-$color');
+    final circle = Container(
+      width: 24,
+      height: 24,
+      decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+    );
     if (!selected) return circle;
 
     return WDiv(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttersdk_wind/fluttersdk_wind.dart';
 
 import '../../models/review.dart';
+import '../common/app_image.dart';
 import '../star_rating.dart';
 
 class ReviewTile extends StatelessWidget {
@@ -19,9 +20,11 @@ class ReviewTile extends StatelessWidget {
           children: [
             WDiv(
               className: 'ml-[1.5px]',
-              child: WImage(
-                src: 'asset://${review.avatar}',
-                className: 'size-[36px] rounded-full object-cover',
+              child: AppImage(
+                review.avatarUrl,
+                width: 36,
+                height: 36,
+                borderRadius: BorderRadius.circular(18),
               ),
             ),
             WDiv(
@@ -34,14 +37,17 @@ class ReviewTile extends StatelessWidget {
                 WDiv(
                   className: 'mt-[6px]',
                   child: StarRating(
-                    rating: review.rating,
+                    rating: review.rating.round(),
                     size: 'text-[13px]',
                     gap: 'ml-[2px]',
                   ),
                 ),
               ],
             ),
-            WText(review.time, className: 'font-body font-light text-[9.5px] text-fog'),
+            WText(
+              review.time,
+              className: 'font-body font-light text-[9.5px] text-fog',
+            ),
           ],
         ),
         WText(

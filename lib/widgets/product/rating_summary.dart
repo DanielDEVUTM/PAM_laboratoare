@@ -22,7 +22,7 @@ class RatingSummary extends StatelessWidget {
               className: 'flex flex-row items-end',
               children: [
                 WText(
-                  product.rating.toStringAsFixed(1),
+                  (product.rating ?? 0).toStringAsFixed(1),
                   className: 'font-mont text-[34px] font-medium leading-[34px] text-night',
                 ),
                 const WText(
@@ -35,12 +35,12 @@ class RatingSummary extends StatelessWidget {
               className: 'flex flex-col items-end',
               children: [
                 StarRating(
-                  rating: product.rating.round(),
+                  rating: (product.rating ?? 0).round(),
                   size: 'text-[20px]',
                   gap: 'ml-[1px]',
                 ),
                 WText(
-                  '${product.ratingsCount} ratings',
+                  '${product.ratingCount} ratings',
                   className:
                       'mt-[5px] font-body font-light text-[10px] text-ghost',
                 ),
@@ -51,15 +51,15 @@ class RatingSummary extends StatelessWidget {
         WDiv(
           className: 'flex flex-col items-stretch mt-[11px]',
           children: [
-            for (final (stars, percent) in product.ratingBreakdown)
-              _RatingBar(stars: stars, percent: percent),
+            for (final share in product.ratingBreakdown)
+              _RatingBar(stars: share.stars, percent: share.percentage),
           ],
         ),
         WDiv(
           className: 'flex flex-row items-center justify-between mt-[21px]',
           children: [
             WText(
-              '${product.reviewsCount} Reviews',
+              '${product.reviewCount} Reviews',
               className: 'font-body font-light text-[10.5px] text-silver',
             ),
             WAnchor(

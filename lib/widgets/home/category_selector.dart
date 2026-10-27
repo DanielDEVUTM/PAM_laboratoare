@@ -3,7 +3,7 @@ import 'package:fluttersdk_wind/fluttersdk_wind.dart';
 
 import '../../models/category.dart';
 
-/// Categoriile din JSON; apasarea deschide Discover filtrat pe categorie.
+/// Categoriile din JSON; cea selectata vine din campul "selected".
 class CategorySelector extends StatelessWidget {
   final List<Category> categories;
   final String? selectedId;
@@ -24,7 +24,7 @@ class CategorySelector extends StatelessWidget {
         for (final category in categories)
           _CategoryItem(
             label: category.name,
-            icon: category.icon,
+            icon: category.iconAsset,
             selected: category.id == selectedId,
             onTap: () => onSelected(category.id),
           ),

@@ -3,6 +3,7 @@ import 'package:fluttersdk_wind/fluttersdk_wind.dart';
 
 import '../../models/product.dart';
 import '../../routes.dart';
+import '../common/app_image.dart';
 import 'section_header.dart';
 
 class RecommendedSection extends StatelessWidget {
@@ -49,9 +50,13 @@ class _RecommendedCard extends StatelessWidget {
       child: WDiv(
         className: 'flex flex-row items-center w-[213px] h-[66px] bg-white rounded-lg border border-line shadow-card',
         children: [
-          WImage(
-            src: 'asset://${product.image}',
-            className: 'w-[65px] h-[64px] rounded-l-lg object-cover',
+          AppImage(
+            product.imageUrl,
+            width: 65,
+            height: 64,
+            borderRadius: const BorderRadius.horizontal(
+              left: Radius.circular(8),
+            ),
           ),
           WDiv(
             className: 'flex-1 flex flex-col items-start pl-[9px] pt-[3px]',

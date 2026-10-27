@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:fluttersdk_wind/fluttersdk_wind.dart';
 
-import '../../models/category.dart';
+/// Rand de filtre: "All" + optiunile date ([value] null inseamna "All").
+class FilterChips<T> extends StatelessWidget {
+  final List<(T, String)> options;
+  final T? selected;
+  final ValueChanged<T?> onSelected;
 
-/// Filtrul pe categorii: "All" + categoriile din JSON.
-class CategoryChips extends StatelessWidget {
-  final List<Category> categories;
-  final String? selectedId;
-  final ValueChanged<String?> onSelected;
-
-  const CategoryChips({
+  const FilterChips({
     super.key,
-    required this.categories,
-    required this.selectedId,
+    required this.options,
+    required this.selected,
     required this.onSelected,
   });
 
@@ -25,14 +23,14 @@ class CategoryChips extends StatelessWidget {
         children: [
           _Chip(
             label: 'All',
-            selected: selectedId == null,
+            selected: selected == null,
             onTap: () => onSelected(null),
           ),
-          for (final category in categories)
+          for (final (value, label) in options)
             _Chip(
-              label: category.name,
-              selected: selectedId == category.id,
-              onTap: () => onSelected(category.id),
+              label: label,
+              selected: selected == value,
+              onTap: () => onSelected(value),
             ),
         ],
       ),
