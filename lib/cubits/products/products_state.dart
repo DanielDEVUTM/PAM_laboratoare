@@ -3,12 +3,11 @@ part of 'products_cubit.dart';
 enum ProductsStatus { loading, success, empty, error }
 
 enum SortOption {
-  popular('Popular'),
-  newest('Newest'),
+  recommended('Recommended'),
   priceLowHigh('Price: low to high'),
   priceHighLow('Price: high to low'),
-  rating('Top rated'),
-  name('Name A-Z');
+  nameAZ('Name A-Z'),
+  nameZA('Name Z-A');
 
   final String label;
   const SortOption(this.label);
@@ -16,37 +15,45 @@ enum SortOption {
 
 class ProductsState extends Equatable {
   final ProductsStatus status;
-  final List<Category> categories;
 
-  /// Toate produsele din JSON.
-  final List<Product> allProducts;
+  /// Toate datele din JSON.
+  final Catalog catalog;
 
   /// Produsele dupa cautare, filtrare si sortare.
   final List<Product> visibleProducts;
   final String query;
 
-  /// null inseamna toate categoriile.
-  final String? categoryId;
+  /// Filtrul pe sectiuni; null inseamna toate produsele.
+  final ProductSection? section;
   final SortOption sort;
+
+  /// Categoria selectata pe Home (initial cea cu "selected": true in JSON).
+  final String? categoryId;
   final String? errorMessage;
 
   const ProductsState({
     this.status = ProductsStatus.loading,
-    this.categories = const [],
-    this.allProducts = const [],
+    this.catalog = const Catalog(),
     this.visibleProducts = const [],
     this.query = '',
+    this.section,
+    this.sort = SortOption.recommended,
     this.categoryId,
-    this.sort = SortOption.popular,
     this.errorMessage,
   });
 
-  List<Product> get featured => allProducts.where((p) => p.isFeatured).toList();
+  List<Product> get allProducts => catalog.products;
 
-  List<Product> get recommended =>
-      allProducts.where((p) => p.isRecommended).toList();
+  List<Product> inSection(ProductSection section) =>
+      allProducts.where((p) => p.sections.contains(section)).toList();
 
-  bool get hasFilters => query.trim().isNotEmpty || categoryId != null;
+  bool get hasFilters => query.trim().isNotEmpty || section != null;
+
+  /// Produsele marcate favorite in JSON ("isFavorite": true).
+  Set<String> get initialFavorites => {
+    for (final p in allProducts)
+      if (p.isFavorite) p.id,
+  };
 
   Product? productById(String id) {
     for (final product in allProducts) {
@@ -55,29 +62,24 @@ class ProductsState extends Equatable {
     return null;
   }
 
-  /// Produse din aceeasi categorie, fara produsul curent.
-  List<Product> similarTo(Product product) => allProducts
-      .where((p) => p.category == product.category && p.id != product.id)
-      .toList();
-
   ProductsState copyWith({
     ProductsStatus? status,
-    List<Category>? categories,
-    List<Product>? allProducts,
+    Catalog? catalog,
     List<Product>? visibleProducts,
     String? query,
-    String? Function()? categoryId,
+    ProductSection? Function()? section,
     SortOption? sort,
+    String? Function()? categoryId,
     String? Function()? errorMessage,
   }) {
     return ProductsState(
       status: status ?? this.status,
-      categories: categories ?? this.categories,
-      allProducts: allProducts ?? this.allProducts,
+      catalog: catalog ?? this.catalog,
       visibleProducts: visibleProducts ?? this.visibleProducts,
       query: query ?? this.query,
-      categoryId: categoryId != null ? categoryId() : this.categoryId,
+      section: section != null ? section() : this.section,
       sort: sort ?? this.sort,
+      categoryId: categoryId != null ? categoryId() : this.categoryId,
       errorMessage: errorMessage != null ? errorMessage() : this.errorMessage,
     );
   }
@@ -85,12 +87,12 @@ class ProductsState extends Equatable {
   @override
   List<Object?> get props => [
     status,
-    categories,
-    allProducts,
+    catalog,
     visibleProducts,
     query,
-    categoryId,
+    section,
     sort,
+    categoryId,
     errorMessage,
   ];
 }

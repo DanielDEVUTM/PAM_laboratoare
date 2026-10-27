@@ -13,4 +13,7 @@ class FavoritesCubit extends Cubit<Set<String>> {
   }
 
   void remove(String id) => emit({...state}..remove(id));
+
+  /// Adauga favoritele venite din JSON, dupa incarcarea datelor.
+  void addAll(Set<String> ids) => emit({...state, ...ids});
 }

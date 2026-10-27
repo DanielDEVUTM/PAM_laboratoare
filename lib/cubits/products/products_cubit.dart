@@ -1,13 +1,13 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../data/catalog.dart';
 import '../../data/product_repository.dart';
-import '../../models/category.dart';
 import '../../models/product.dart';
 
 part 'products_state.dart';
 
-/// Incarca produsele din JSON si aplica cautarea, filtrarea si sortarea.
+/// Incarca datele din JSON si aplica cautarea, filtrarea si sortarea.
 class ProductsCubit extends Cubit<ProductsState> {
   final ProductRepository repository;
 
@@ -19,11 +19,12 @@ class ProductsCubit extends Cubit<ProductsState> {
     );
     try {
       final catalog = await repository.loadCatalog();
+      String? selected;
+      for (final category in catalog.categories) {
+        if (category.selected) selected = category.id;
+      }
       _emitFiltered(
-        state.copyWith(
-          categories: catalog.categories,
-          allProducts: catalog.products,
-        ),
+        state.copyWith(catalog: catalog, categoryId: () => selected),
       );
     } catch (e) {
       emit(
@@ -37,21 +38,24 @@ class ProductsCubit extends Cubit<ProductsState> {
 
   void search(String query) => _emitFiltered(state.copyWith(query: query));
 
-  /// [categoryId] null afiseaza toate categoriile.
-  void selectCategory(String? categoryId) =>
-      _emitFiltered(state.copyWith(categoryId: () => categoryId));
+  /// [section] null afiseaza toate produsele.
+  void filterBySection(ProductSection? section) =>
+      _emitFiltered(state.copyWith(section: () => section));
 
   void sortBy(SortOption sort) => _emitFiltered(state.copyWith(sort: sort));
 
+  void selectCategory(String categoryId) =>
+      emit(state.copyWith(categoryId: () => categoryId));
+
   void clearFilters() => _emitFiltered(
-    state.copyWith(query: '', categoryId: () => null, sort: SortOption.popular),
+    state.copyWith(
+      query: '',
+      section: () => null,
+      sort: SortOption.recommended,
+    ),
   );
 
   void _emitFiltered(ProductsState next) {
-    if (next.status == ProductsStatus.error) {
-      emit(next);
-      return;
-    }
     final visible = _apply(next);
     emit(
       next.copyWith(
@@ -64,30 +68,29 @@ class ProductsCubit extends Cubit<ProductsState> {
   static List<Product> _apply(ProductsState s) {
     final query = s.query.trim().toLowerCase();
     final result = s.allProducts.where((p) {
-      final matchesCategory =
-          s.categoryId == null || p.category == s.categoryId;
+      final matchesSection =
+          s.section == null || p.sections.contains(s.section);
       final matchesQuery =
           query.isEmpty ||
           p.name.toLowerCase().contains(query) ||
           p.description.toLowerCase().contains(query);
-      return matchesCategory && matchesQuery;
+      return matchesSection && matchesQuery;
     }).toList();
 
+    int byName(Product a, Product b) =>
+        a.name.toLowerCase().compareTo(b.name.toLowerCase());
+
     switch (s.sort) {
-      case SortOption.popular:
-        result.sort((a, b) => b.ratingsCount.compareTo(a.ratingsCount));
-      case SortOption.newest:
-        result.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+      case SortOption.recommended:
+        break; // ordinea din JSON
       case SortOption.priceLowHigh:
         result.sort((a, b) => a.price.compareTo(b.price));
       case SortOption.priceHighLow:
         result.sort((a, b) => b.price.compareTo(a.price));
-      case SortOption.rating:
-        result.sort((a, b) => b.rating.compareTo(a.rating));
-      case SortOption.name:
-        result.sort(
-          (a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()),
-        );
+      case SortOption.nameAZ:
+        result.sort(byName);
+      case SortOption.nameZA:
+        result.sort((a, b) => byName(b, a));
     }
     return result;
   }
