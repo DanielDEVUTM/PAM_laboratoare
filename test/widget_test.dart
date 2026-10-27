@@ -29,13 +29,20 @@ void main() {
     );
     await tester.pumpAndSettle();
 
+    expect(find.text('GemStore'), findsOneWidget);
     expect(find.text('Feature Products'), findsOneWidget);
     expect(find.text('Turtleneck Sweater'), findsOneWidget);
 
-    await tester.tap(find.text('Turtleneck Sweater'));
+    // p003 e favorit din JSON ("isFavorite": true)
+    expect(find.text('1'), findsOneWidget);
+
+    await tester.tap(find.text('Sportwear Set'));
     await tester.pumpAndSettle();
     expect(find.text('Add To Cart'), findsOneWidget);
     expect(find.text('Description'), findsOneWidget);
+    expect(find.text('Reviews'), findsOneWidget);
+    expect(find.text('Jennifer Rose'), findsOneWidget);
+    expect(find.text('Similar Product'), findsOneWidget);
   });
 
   testWidgets('Discover: cautare fara rezultate afiseaza starea Empty', (
